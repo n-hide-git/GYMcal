@@ -15,8 +15,10 @@ body {
 
 h3 {
     text-align: center;
-    font-size: 2em;
+    font-size: 1.6em;
+    color: #004a99;
     margin-bottom: 20px;
+    white-space: nowrap;
 }
 
 label {
@@ -193,6 +195,10 @@ function limit(el,max){
             ?.querySelector('input');
 
         if(next) next.focus();
+        
+   @media (max-width: 480px) {
+    h3 {
+        font-size: 1.4em;
     }
 }
 
