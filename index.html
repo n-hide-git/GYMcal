@@ -190,47 +190,17 @@ th, td {
 </table>
 
 <script>
-const inputOrder = [
-    'topM',
-    'topS',
-    'topMs',
-    'baseP_int',
-    'baseP_dec',
-    'myM',
-    'myS',
-    'myMs'
-];
+
 function limit(el,max){
+    if(el.value.length>max){
+        el.value=el.value.slice(0,max);
 
-    if(el.value.length > max){
-        el.value = el.value.slice(0,max);
-    }
+        const next=
+            el.parentElement.nextElementSibling
+            ?.querySelector('input');
 
-    if(el.value.length === max){
-
-        const currentId = el.id;
-        const currentIndex = inputOrder.indexOf(currentId);
-
-        if(currentIndex >= 0){
-
-            if(currentId === 'myMs'){
-
-                document.getElementById('myM').focus();
-                document.getElementById('myM').select();
-
-            }else{
-
-                const nextId = inputOrder[currentIndex + 1];
-
-                if(nextId){
-
-                    document.getElementById(nextId).focus();
-                    document.getElementById(nextId).select();
-
-                }
-            }
-        }
-    }
+        if(next) next.focus();
+    }       
 }
 
 function saveAndCalc(){
@@ -274,18 +244,6 @@ window.onload=()=>{
         if(val){
             document.getElementById(id).value=val;
         }
-    });
-
-    document.querySelectorAll('input').forEach(el=>{
-
-        el.addEventListener('focus',()=>{
-
-            setTimeout(()=>{
-                el.select();
-            },50);
-
-        });
-
     });
 
     calculate();
