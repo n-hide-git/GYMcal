@@ -111,6 +111,11 @@ th, td {
     text-align: center;
     font-size: 1.15em;
 }
+   @media (max-width: 480px) {
+    h3 {
+        font-size: 1.4em;
+    }
+}    
 </style>
 </head>
 
@@ -195,11 +200,7 @@ function limit(el,max){
             ?.querySelector('input');
 
         if(next) next.focus();
-        
-   @media (max-width: 480px) {
-    h3 {
-        font-size: 1.4em;
-    }
+    }       
 }
 
 function saveAndCalc(){
