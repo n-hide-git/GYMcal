@@ -131,12 +131,13 @@ th, td {
 
     <div class="digit-guide" data-placeholder="2桁">
         <input type="number" id="topS" placeholder="秒"
-               oninput="limit(this,2);saveAndCalc()">
+       min="0" max="59"
+       oninput="limit(this,2)">
     </div>
 
     <div class="digit-guide" data-placeholder="3桁">
         <input type="number" id="topMs" placeholder="ミリ"
-               oninput="limit(this,3);saveAndCalc()">
+               oninput="limit(this,3)">
     </div>
 </div>
 
@@ -151,7 +152,7 @@ th, td {
     <div class="digit-guide" data-placeholder="2桁">
         <input type="number" id="baseP_dec"
                placeholder="小数"
-               oninput="limit(this,2);saveAndCalc()">
+               oninput="limit(this,2)">
     </div>
 </div>
 
@@ -164,15 +165,15 @@ th, td {
     </div>
 
     <div class="digit-guide" data-placeholder="2桁">
-        <input type="number" id="myS"
-               placeholder="秒"
-               oninput="limit(this,2);saveAndCalc()">
+        <input type="number" id="myS" placeholder="秒"
+       min="0" max="59"
+       oninput="limit(this,2)">
     </div>
 
     <div class="digit-guide" data-placeholder="3桁">
         <input type="number" id="myMs"
                placeholder="ミリ"
-               oninput="limit(this,3);saveAndCalc()">
+               oninput="limit(this,3)">
     </div>
 </div>
 
@@ -192,15 +193,28 @@ th, td {
 <script>
 
 function limit(el,max){
-    if(el.value.length>max){
-        el.value=el.value.slice(0,max);
 
-        const next=
-            el.parentElement.nextElementSibling
-            ?.querySelector('input');
+    if(el.value.length > max){
+        el.value = el.value.slice(0,max);
+    }
 
-        if(next) next.focus();
-    }       
+    // 秒は59まで
+    if(
+        (el.id === 'topS' || el.id === 'myS') &&
+        Number(el.value) > 59
+    ){
+        el.value = 59;
+    }
+
+    // ミリ秒は999まで
+    if(
+        (el.id === 'topMs' || el.id === 'myMs') &&
+        Number(el.value) > 999
+    ){
+        el.value = 999;
+    }
+
+    saveAndCalc();
 }
 
 function saveAndCalc(){
