@@ -1,118 +1,342 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>モトジムカーナ計算</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { font-family: sans-serif; padding: 20px; max-width: 400px; margin: auto; }
-        label { font-size: 0.9em; display: block; margin-top: 15px; margin-bottom: 5px; font-weight: bold; }
-        .row-3 { display: flex; gap: 5px; margin-bottom: 15px; }
-        .row-3 > div { flex: 1; position: relative; }
-        .row-2 { display: flex; gap: 5px; margin-bottom: 15px; }
-        .row-2 > div:nth-child(1) { flex: 3; }
-        .row-2 > div:nth-child(2) { flex: 1; position: relative; }
-        input { 
-            width: 100%; padding: 12px 5px; box-sizing: border-box; 
-            text-align: center; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;
-        }
-        .digit-guide::after {
-            content: attr(data-placeholder);
-            position: absolute; right: 8px; top: 12px;
-            color: #aaa; pointer-events: none; font-size: 0.7em;
-        }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
-        #result { margin-top: 20px; padding: 20px; background: #004a99; color: white; border-radius: 5px; font-size: 1.5em; text-align: center; font-weight: bold; }
-        #onePercent { margin-top: 6px; color: #111; font-size: 0.78em; text-align: center; }
-    </style>
+<meta charset="UTF-8">
+<title>良く見える！モトジムTOP比</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: sans-serif;
+    padding: 20px;
+    max-width: 500px;
+    margin: auto;
+}
+
+h3 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 1.3em;
+    display: block;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.row-3 {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.row-3 > div {
+    flex: 1;
+    position: relative;
+}
+
+.row-2 {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.row-2 > div:nth-child(1) {
+    flex: 3;
+}
+
+.row-2 > div:nth-child(2) {
+    flex: 1;
+    position: relative;
+}
+
+input {
+    width: 100%;
+    padding: 14px 5px;
+    box-sizing: border-box;
+    text-align: center;
+    border: 2px solid #888;
+    border-radius: 6px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.digit-guide::after {
+    content: attr(data-placeholder);
+    position: absolute;
+    right: 8px;
+    top: 16px;
+    color: #999;
+    pointer-events: none;
+    font-size: 0.75em;
+}
+
+#result {
+    margin-top: 20px;
+    padding: 20px;
+    background: #004a99;
+    color: white;
+    border-radius: 8px;
+    font-size: 2em;
+    text-align: center;
+    font-weight: bold;
+}
+
+#onePercent {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    background: #f0f0f0;
+    font-size: 1.2em;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: center;
+    font-size: 1.15em;
+}
+</style>
 </head>
+
 <body>
-    <h3>モトジムカーナ計算</h3>
 
-    <label>TOPタイム</label>
-    <div class="row-3">
-        <div><input type="number" id="topM" placeholder="分" oninput="saveAndCalc()"></div>
-        <div class="digit-guide" data-placeholder="2桁"><input type="number" id="topS" placeholder="秒" oninput="limit(this, 2); saveAndCalc()"></div>
-        <div class="digit-guide" data-placeholder="3桁"><input type="number" id="topMs" placeholder="ミリ" oninput="limit(this, 3); saveAndCalc()"></div>
+<h3>良く見える！モトジムTOP比</h3>
+
+<label>TOPタイム</label>
+<div class="row-3">
+    <div>
+        <input type="number" id="topM" placeholder="分" oninput="saveAndCalc()">
     </div>
 
-    <label>TOPタイムを何％に設定？</label>
-    <div class="row-2">
-        <div><input type="number" id="baseP_int" placeholder="整数" oninput="saveAndCalc()"></div>
-        <div class="digit-guide" data-placeholder="2桁"><input type="number" id="baseP_dec" placeholder="小数" oninput="limit(this, 2); saveAndCalc()"></div>
-    </div>
-    
-    <label>自分のタイム</label>
-    <div class="row-3">
-        <div><input type="number" id="myM" placeholder="分" oninput="saveAndCalc()"></div>
-        <div class="digit-guide" data-placeholder="2桁"><input type="number" id="myS" placeholder="秒" oninput="limit(this, 2); saveAndCalc()"></div>
-        <div class="digit-guide" data-placeholder="3桁"><input type="number" id="myMs" placeholder="ミリ" oninput="limit(this, 3); saveAndCalc()"></div>
+    <div class="digit-guide" data-placeholder="2桁">
+        <input type="number" id="topS" placeholder="秒"
+               oninput="limit(this,2);saveAndCalc()">
     </div>
 
-    <div id="result">あなたの％: ---</div>
-    <div id="onePercent"></div>
+    <div class="digit-guide" data-placeholder="3桁">
+        <input type="number" id="topMs" placeholder="ミリ"
+               oninput="limit(this,3);saveAndCalc()">
+    </div>
+</div>
 
-    <table>
-        <thead><tr style="background:#f0f0f0;"><th>％基準</th><th>タイム目安</th></tr></thead>
-        <tbody id="tableBody"></tbody>
-    </table>
+<label>TOPタイムを何％に設定？</label>
+<div class="row-2">
+    <div>
+        <input type="number" id="baseP_int"
+               placeholder="整数"
+               oninput="saveAndCalc()">
+    </div>
 
-    <script>
-        function limit(el, max) {
-            if (el.value.length > max) {
-                el.value = el.value.slice(0, max);
-                const next = el.parentElement.nextElementSibling?.querySelector('input');
-                if (next) next.focus();
-            }
+    <div class="digit-guide" data-placeholder="2桁">
+        <input type="number" id="baseP_dec"
+               placeholder="小数"
+               oninput="limit(this,2);saveAndCalc()">
+    </div>
+</div>
+
+<label>自分のタイム</label>
+<div class="row-3">
+    <div>
+        <input type="number" id="myM"
+               placeholder="分"
+               oninput="saveAndCalc()">
+    </div>
+
+    <div class="digit-guide" data-placeholder="2桁">
+        <input type="number" id="myS"
+               placeholder="秒"
+               oninput="limit(this,2);saveAndCalc()">
+    </div>
+
+    <div class="digit-guide" data-placeholder="3桁">
+        <input type="number" id="myMs"
+               placeholder="ミリ"
+               oninput="limit(this,3);saveAndCalc()">
+    </div>
+</div>
+
+<div id="result">あなたの％: ---</div>
+<div id="onePercent"></div>
+
+<table>
+    <thead>
+        <tr>
+            <th>％基準</th>
+            <th>タイム目安</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+
+<script>
+
+function limit(el,max){
+    if(el.value.length>max){
+        el.value=el.value.slice(0,max);
+
+        const next=
+            el.parentElement.nextElementSibling
+            ?.querySelector('input');
+
+        if(next) next.focus();
+    }
+}
+
+function saveAndCalc(){
+
+    const ids=[
+        'topM',
+        'topS',
+        'topMs',
+        'baseP_int',
+        'baseP_dec',
+        'myM',
+        'myS',
+        'myMs'
+    ];
+
+    ids.forEach(id=>{
+        localStorage.setItem(
+            id,
+            document.getElementById(id).value
+        );
+    });
+
+    calculate();
+}
+
+window.onload=()=>{
+
+    [
+        'topM',
+        'topS',
+        'topMs',
+        'baseP_int',
+        'baseP_dec',
+        'myM',
+        'myS',
+        'myMs'
+    ].forEach(id=>{
+
+        const val=localStorage.getItem(id);
+
+        if(val){
+            document.getElementById(id).value=val;
         }
-        function saveAndCalc() {
-            const ids = ['topM','topS','topMs','baseP_int','baseP_dec','myM','myS','myMs'];
-            ids.forEach(id => localStorage.setItem(id, document.getElementById(id).value));
-            calculate();
-        }
-        window.onload = () => {
-            ['topM','topS','topMs','baseP_int','baseP_dec','myM','myS','myMs'].forEach(id => {
-                const val = localStorage.getItem(id);
-                if (val) document.getElementById(id).value = val;
-            });
-            calculate();
-        };
-        function calculate() {
-            const topMs = (parseInt(document.getElementById('topM').value || 0) * 60000) + 
-                          (parseInt(document.getElementById('topS').value || 0) * 1000) + 
-                          parseInt(document.getElementById('topMs').value || 0);
-            const myMs = (parseInt(document.getElementById('myM').value || 0) * 60000) + 
-                         (parseInt(document.getElementById('myS').value || 0) * 1000) + 
-                         parseInt(document.getElementById('myMs').value || 0);
-            const baseP = parseFloat((document.getElementById('baseP_int').value || 0) + "." + (document.getElementById('baseP_dec').value || 0));
+    });
 
-            const onePercentEl = document.getElementById('onePercent');
+    calculate();
+};
 
-            if (topMs === 0 || myMs === 0 || baseP === 0) {
-                onePercentEl.innerText = '';
-                return;
-            }
+function calculate(){
 
-            const virtual100Ms = topMs / (baseP / 100);
-            const myPercent = ((myMs / virtual100Ms) * 100).toFixed(2);
-            document.getElementById('result').innerText = `あなたの％: ${myPercent}％`;
+    const topMs=
 
-            // 1% = virtual100Ms / 100 ミリ秒
-            const onePercentSec = (virtual100Ms / 100) / 1000;
-            onePercentEl.innerText = `1％ ＝ ${onePercentSec.toFixed(2)}秒`;
+        (parseInt(document.getElementById('topM').value||0)*60000)+
+        (parseInt(document.getElementById('topS').value||0)*1000)+
+        parseInt(document.getElementById('topMs').value||0);
 
-            const rates = [100, 105, 107, 110, 115, 120, 125, 130];
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-            rates.forEach(r => {
-                const ms = virtual100Ms * (r / 100);
-                const m = Math.floor(ms / 60000);
-                const s = Math.floor((ms % 60000) / 1000);
-                const mil = Math.floor(ms % 1000);
-                tbody.innerHTML += `<tr><td>${r}％</td><td>${m}:${s.toString().padStart(2, '0')}.${mil.toString().padStart(3, '0')}</td></tr>`;
-            });
-        }
-    </script>
+    const myMs=
+
+        (parseInt(document.getElementById('myM').value||0)*60000)+
+        (parseInt(document.getElementById('myS').value||0)*1000)+
+        parseInt(document.getElementById('myMs').value||0);
+
+    const baseP=parseFloat(
+        (document.getElementById('baseP_int').value||0)
+        + "."
+        + (document.getElementById('baseP_dec').value||0)
+    );
+
+    const tbody=document.getElementById('tableBody');
+    const onePercentEl=document.getElementById('onePercent');
+
+    tbody.innerHTML='';
+
+    if(topMs===0 || baseP===0){
+
+        document.getElementById('result').innerText=
+            'あなたの％: ---';
+
+        onePercentEl.innerText='';
+
+        return;
+    }
+
+    const virtual100Ms=
+        topMs/(baseP/100);
+
+    const onePercentSec=
+        (virtual100Ms/100)/1000;
+
+    onePercentEl.innerText=
+        `1％ ＝ ${onePercentSec.toFixed(2)}秒`;
+
+    const rates=[
+        100,
+        105,
+        107,
+        110,
+        115,
+        120,
+        125,
+        130
+    ];
+
+    rates.forEach(r=>{
+
+        const ms=
+            virtual100Ms*(r/100);
+
+        const m=
+            Math.floor(ms/60000);
+
+        const s=
+            Math.floor((ms%60000)/1000);
+
+        const mil=
+            Math.floor(ms%1000);
+
+        tbody.innerHTML+=`
+        <tr>
+            <td>${r}％</td>
+            <td>
+                ${m}:${s.toString().padStart(2,'0')}.${mil.toString().padStart(3,'0')}
+            </td>
+        </tr>`;
+    });
+
+    if(myMs>0){
+
+        const myPercent=
+            ((myMs/virtual100Ms)*100)
+            .toFixed(2);
+
+        document.getElementById('result').innerText=
+            `あなたの％: ${myPercent}％`;
+
+    }else{
+
+        document.getElementById('result').innerText=
+            'あなたの％: ---';
+    }
+}
+
+</script>
+
 </body>
 </html>
