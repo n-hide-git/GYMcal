@@ -1,3 +1,4 @@
+<!-- 2026.07.16 -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -66,6 +67,12 @@ input {
     font-weight: bold;
 }
 
+/* 2026.07.16 追加: 0埋め対象の入力欄を右寄せにして桁の位置を視覚的に分かりやすくする */
+.digit-guide input {
+    text-align: right;
+    padding-right: 10px;
+}
+
 .digit-guide::after {
     content: attr(data-placeholder);
     position: absolute;
@@ -74,6 +81,11 @@ input {
     color: #999;
     pointer-events: none;
     font-size: 0.75em;
+}
+
+/* 2026.07.16 追加: フォーカス中はガイド文字を隠す（入力の邪魔をしないため） */
+.digit-guide:focus-within::after {
+    display: none;
 }
 
 #result {
@@ -126,18 +138,18 @@ th, td {
 <label>TOPタイム</label>
 <div class="row-3">
     <div>
-        <input type="number" id="topM" placeholder="分" oninput="saveAndCalc()">
+        <input type="number" id="topM" placeholder="分" onfocus="this.value=''" oninput="limitMinute(this)">
     </div>
 
     <div class="digit-guide" data-placeholder="2桁">
         <input type="number" id="topS" placeholder="秒"
        min="0" max="59"
-       oninput="limit(this,2)">
+       onfocus="this.value=''" oninput="limit(this,2)" onblur="padOnBlur(this,2)">
     </div>
 
     <div class="digit-guide" data-placeholder="3桁">
         <input type="number" id="topMs" placeholder="ミリ"
-               oninput="limit(this,3)">
+               onfocus="this.value=''" oninput="limit(this,3)" onblur="padOnBlur(this,3)">
     </div>
 </div>
 
@@ -146,13 +158,13 @@ th, td {
     <div>
         <input type="number" id="baseP_int"
                placeholder="整数"
-               oninput="saveAndCalc()">
+               oninput="limit(this,3)" onblur="checkPercentMin()">
     </div>
 
     <div class="digit-guide" data-placeholder="2桁">
         <input type="number" id="baseP_dec"
                placeholder="小数"
-               oninput="limit(this,2)">
+               oninput="limit(this,2)" onblur="padOnBlur(this,2); checkPercentMin();">
     </div>
 </div>
 
@@ -161,19 +173,19 @@ th, td {
     <div>
         <input type="number" id="myM"
                placeholder="分"
-               oninput="saveAndCalc()">
+               onfocus="this.value=''" oninput="limitMinute(this)">
     </div>
 
     <div class="digit-guide" data-placeholder="2桁">
         <input type="number" id="myS" placeholder="秒"
        min="0" max="59"
-       oninput="limit(this,2)">
+       onfocus="this.value=''" oninput="limit(this,2)" onblur="padOnBlur(this,2)">
     </div>
 
     <div class="digit-guide" data-placeholder="3桁">
         <input type="number" id="myMs"
                placeholder="ミリ"
-               oninput="limit(this,3)">
+               onfocus="this.value=''" oninput="limit(this,3)" onblur="padOnBlur(this,3)">
     </div>
 </div>
 
@@ -192,7 +204,57 @@ th, td {
 
 <script>
 
+/* 2026.07.16 追加: マイナス入力を禁止し、入れようとした場合は "00" にリセットする
+   "-"が値のどこかに含まれる場合（例: 7-333 のような不正な形も含む）はすべて対象 */
+function guardNegative(el){
+
+    if(el.value !== '' && (el.value.includes('-') || Number(el.value) < 0)){
+        el.value = '00';
+    }
+}
+
+/* 2026.07.16 追加: マイナス禁止ガード付きで値を保存・再計算する（分・整数欄用） */
+function guardAndSave(el){
+
+    guardNegative(el);
+    saveAndCalc();
+}
+
+/* 2026.07.16 追加: ％（baseP_int + baseP_dec）が100.0未満にならないようにする
+   100未満になった場合は100.0％にリセットする */
+function checkPercentMin(){
+
+    const intEl=document.getElementById('baseP_int');
+    const decEl=document.getElementById('baseP_dec');
+
+    const val=parseFloat(
+        (intEl.value||0) + "." + (decEl.value||0)
+    );
+
+    if(val < 100){
+        intEl.value='100';
+        decEl.value='00';
+        saveAndCalc();
+    }
+}
+
+/* 2026.07.16 追加: 分欄は1桁縛り。2桁目以降を入力しようとした場合は
+   切り詰めではなく "0" にリセットする（欄を指定したら中身の数字は0にする）
+   ※ フォーカス時のクリアは各inputのonfocus="this.value=''"で対応 */
+function limitMinute(el){
+
+    guardNegative(el);
+
+    if(el.value.length > 1){
+        el.value = '0';
+    }
+
+    saveAndCalc();
+}
+
 function limit(el,max){
+
+    guardNegative(el);
 
     if(el.value.length > max){
         el.value = el.value.slice(0,max);
@@ -215,6 +277,17 @@ function limit(el,max){
     }
 
     saveAndCalc();
+}
+
+/* 2026.07.16 追加: フォーカスが外れた時点で桁数固定の0埋め表示に確定する
+   例）2桁欄に "2" だけ入力→blur → "02" と表示され、20ではなく2として
+   確定したことが見た目で分かるようになる */
+function padOnBlur(el, length){
+
+    if(el.value !== ''){
+        el.value = el.value.padStart(length, '0');
+        saveAndCalc();
+    }
 }
 
 function saveAndCalc(){
@@ -240,18 +313,44 @@ function saveAndCalc(){
     calculate();
 }
 
+/* 2026.07.17 追加: Enterキーで次の入力欄へフォーカスを移動する */
+const fieldOrder=[
+    'topM',
+    'topS',
+    'topMs',
+    'baseP_int',
+    'baseP_dec',
+    'myM',
+    'myS',
+    'myMs'
+];
+
+function focusNext(currentId){
+
+    const idx=fieldOrder.indexOf(currentId);
+    const nextId=fieldOrder[idx+1];
+
+    if(nextId){
+        document.getElementById(nextId).focus();
+    }else{
+        document.getElementById(currentId).blur();
+    }
+}
+
+fieldOrder.forEach(id=>{
+
+    document.getElementById(id).addEventListener('keydown', e=>{
+
+        if(e.key==='Enter'){
+            e.preventDefault();
+            focusNext(id);
+        }
+    });
+});
+
 window.onload=()=>{
 
-    [
-        'topM',
-        'topS',
-        'topMs',
-        'baseP_int',
-        'baseP_dec',
-        'myM',
-        'myS',
-        'myMs'
-    ].forEach(id=>{
+    fieldOrder.forEach(id=>{
 
         const val=localStorage.getItem(id);
 
