@@ -106,6 +106,24 @@ input:focus {
     font-weight: bold;
 }
 
+/* 2026.07.16 追加: 入力済ボタン */
+#doneBtn {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    background: #888;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#doneBtn:active {
+    background: #666;
+}
+
 #onePercent {
     margin-top: 10px;
     text-align: center;
@@ -195,6 +213,8 @@ th, td {
                onfocus="this.value=''" oninput="limit(this,3)" onblur="padOnBlur(this,3)">
     </div>
 </div>
+
+<button type="button" id="doneBtn" onclick="finishInput()">全て入力済</button>
 
 <div id="result">あなたの％: ---</div>
 <div id="onePercent"></div>
@@ -306,6 +326,17 @@ function padOnBlur(el, length){
         el.value = el.value.padStart(length, '0');
         saveAndCalc();
     }
+}
+
+/* 2026.07.16 追加: 「入力済」ボタン用。フォーカスを外してキーボードを閉じ、
+   最新の値で保存・再計算する（最後の欄にEnter移動先が無い代わりの操作） */
+function finishInput(){
+
+    if(document.activeElement && document.activeElement.tagName==='INPUT'){
+        document.activeElement.blur();
+    }
+
+    saveAndCalc();
 }
 
 function saveAndCalc(){
