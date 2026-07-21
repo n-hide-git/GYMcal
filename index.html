@@ -1,10 +1,10 @@
-<!-- 2026.07.16 -->
+<!-- 2026.07.21 -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>良く見える！モトジムTOP比</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地道に更新中:良く見える！モトジムTOP比:nakaZ</title>
+<meta name="viewport" content="width=device-width, initial-scale=0.8">
 
 <style>
 body {
@@ -163,18 +163,18 @@ th, td {
 <label>TOPタイム</label>
 <div class="row-3">
     <div>
-        <input type="number" inputmode="numeric" id="topM" placeholder="分" onfocus="this.value=''" oninput="limitMinute(this)">
+        <input type="number" inputmode="numeric" id="topM" placeholder="分" onfocus="this.value=''" oninput="limitMinute(this)" onblur="padOnBlurZero(this,1)">
     </div>
 
     <div class="digit-guide" data-placeholder="2桁">
         <input type="number" inputmode="numeric" id="topS" placeholder="秒"
        min="0" max="59"
-       onfocus="this.value=''" oninput="limit(this,2)" onblur="padOnBlur(this,2)">
+       onfocus="this.value=''" oninput="limit(this,2)" onblur="padOnBlurZero(this,2)">
     </div>
 
     <div class="digit-guide" data-placeholder="3桁">
         <input type="number" inputmode="numeric" id="topMs" placeholder="ミリ"
-               onfocus="this.value=''" oninput="limit(this,3)" onblur="padOnBlur(this,3)">
+               onfocus="this.value=''" oninput="limit(this,3)" onblur="padOnBlurZero(this,3)">
     </div>
 </div>
 
@@ -198,19 +198,19 @@ th, td {
     <div>
         <input type="number" inputmode="numeric" id="myM"
                placeholder="分"
-               onfocus="this.value=''" oninput="limitMinute(this)">
+               onfocus="this.value=''" oninput="limitMinute(this)" onblur="padOnBlurZero(this,1)">
     </div>
 
     <div class="digit-guide" data-placeholder="2桁">
         <input type="number" inputmode="numeric" id="myS" placeholder="秒"
        min="0" max="59"
-       onfocus="this.value=''" oninput="limit(this,2)" onblur="padOnBlur(this,2)">
+       onfocus="this.value=''" oninput="limit(this,2)" onblur="padOnBlurZero(this,2)">
     </div>
 
     <div class="digit-guide" data-placeholder="3桁">
         <input type="number" inputmode="numeric" id="myMs"
                placeholder="ミリ"
-               onfocus="this.value=''" oninput="limit(this,3)" onblur="padOnBlur(this,3)">
+               onfocus="this.value=''" oninput="limit(this,3)" onblur="padOnBlurZero(this,3)">
     </div>
 </div>
 
@@ -319,13 +319,28 @@ function limit(el,max){
 
 /* 2026.07.16 追加: フォーカスが外れた時点で桁数固定の0埋め表示に確定する
    例）2桁欄に "2" だけ入力→blur → "02" と表示され、20ではなく2として
-   確定したことが見た目で分かるようになる */
+   確定したことが見た目で分かるようになる
+   ※ ％欄（baseP_int / baseP_dec）専用。未入力の場合は何もしない（空のまま） */
 function padOnBlur(el, length){
 
     if(el.value !== ''){
         el.value = el.value.padStart(length, '0');
         saveAndCalc();
     }
+}
+
+/* 2026.07.21 追加: ％欄以外（TOPタイム・自分のタイムの分/秒/ミリ秒）専用の0埋め処理。
+   カーソルが離れた時点で未入力の場合は桁数分の"0"（3桁なら"000"）を自動入力する。
+   値が入っている場合は従来通り桁数分のpaddingのみ行う */
+function padOnBlurZero(el, length){
+
+    if(el.value !== ''){
+        el.value = el.value.padStart(length, '0');
+    }else{
+        el.value = '0'.padStart(length, '0');
+    }
+
+    saveAndCalc();
 }
 
 /* 2026.07.16 追加: 「入力済」ボタン用。フォーカスを外してキーボードを閉じ、
