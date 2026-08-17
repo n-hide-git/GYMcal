@@ -1,3 +1,5 @@
+/*2026.08.17 nakaZ/*
+
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -67,15 +69,18 @@ label {
     position: relative;
 }
 
+/* 2026.08.17 変更:
+   TOPタイム・％設定・自分のタイムの数字を約30％拡大。
+   数字を大きくした分、入力欄の上下余白を縮小して
+   全体の上下サイズをできるだけコンパクトに維持する。 */
 input {
     width: 100%;
-    /* 2026.07.21 変更: 余白を約半分に(14px→7px) */
-    padding: 7px 5px;
+    padding: 1px 5px;      /* 7px → 3px */
     box-sizing: border-box;
     text-align: center;
     border: 2px solid #888;
     border-radius: 6px;
-    font-size: 1.5em;
+    font-size: 3.50em;     /* 1.5em → 約30％拡大 */
     font-weight: bold;
 }
 
@@ -182,7 +187,7 @@ th, td {
 
 <body>
 
-<h3><span class="sub-title">地道に更新中：nakaZ</span><br>「良く見える！モトジムTOP比」</h3>
+<h3><span class="sub-title">2026.08.17 地道に更新中：nakaZ</span><br>「良く見える！モトジムTOP比」</h3>
     
 
 <label>TOPタイム</label>
