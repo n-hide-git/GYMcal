@@ -181,6 +181,8 @@ input:focus {
 #keypad button:active { background: #fff9c4; }
 #keypad button.kp-fn { background: #9aa3ad; color: #fff; font-size: 1.2em; }
 #keypad button.kp-slash { background: #004a99; color: #fff; }
+/* 2026.11.13 追加：「閉じる」ボタンは常に青 */
+#keypad button.kp-close { background: #004a99; color: #fff; font-size: 1.2em; }
 #keypad button.kp-wide { grid-column: span 2; }
 #keypad button:disabled { opacity: 0.35; }
 /* キーパッド表示中は、隠れないよう下に余白を確保 */
@@ -260,7 +262,7 @@ th, td {
 
 <body>
 
-<h3><span class="sub-title">2026.11.13 入力をカンタンに　nakaZ　Ver.5.0</span><br>「良く見える！モトジムTOP比」</h3>
+<h3><span class="sub-title">2026.11.13 入力をカンタンに　nakaZ　Ver.5.3</span><br>「良く見える！モトジムTOP比」</h3>
     
 
 <!-- 2026.11.13 変更：3つの入力欄とも inputmode="numeric" → "none"（標準キーボードを出さず、下の独自キーパッドで入力） -->
@@ -274,7 +276,8 @@ th, td {
 <label for="basePercentInput">TOPタイムの％設定</label>
 <input class="combined-input" type="text" inputmode="none" autocomplete="off"
        id="basePercentInput" placeholder="100.00" aria-label="TOPタイムの％設定">
-<div class="input-hint">例：100.01 → 100.01％　・　100.1 → 100.10％</div>
+<!-- 2026.11.13 変更：％も「/」で区切って入力（100/01 → 100.01％） -->
+<div class="input-hint">例：100/01 → 100.01％　・　100/1 → 100.10％</div>
 
 <!-- 2026.11.13 変更：自分の分・秒・ミリ秒を1つの入力欄に統合 -->
 <label for="myTimeInput">自分のタイム</label>
@@ -289,7 +292,7 @@ th, td {
   <input id="myM"><input id="myS"><input id="myMs">
 </div>
 
-<button type="button" id="doneBtn" onclick="finishInput()">全て入力済</button>
+<!-- 2026.11.13 廃止：「全て入力済」ボタンを削除（キーパッドの「閉じる」で代用） -->
 
 <div id="result">あなたの％: ---</div>
 <div id="onePercent"></div>
@@ -324,7 +327,7 @@ th, td {
 
     <button type="button" data-key="0">0</button>
     <button type="button" data-key="00">00</button>
-    <button type="button" data-key="close" class="kp-fn kp-wide">閉じる</button>
+    <button type="button" data-key="close" class="kp-close kp-wide">閉じる</button>
   </div>
 </div>
 
@@ -482,13 +485,24 @@ function formatTimeDigits(raw){
     const parts=toHalfWidth(String(raw || '')).replace(/[^0-9/]/g,'').split('/').slice(0,3);
     if(parts.length>0) parts[0]=parts[0].slice(0,3); // 分
     if(parts.length>1) parts[1]=parts[1].slice(0,2); // 秒
+    // 2026.11.13 追加：秒は59まで。60以上になる2桁目は入力できない（例：1/80 → 1/8）
+    if(parts.length>1 && parts[1].length===2 && Number(parts[1])>59) parts[1]=parts[1].slice(0,1);
     if(parts.length>2) parts[2]=parts[2].slice(0,3); // ミリ秒：最大3桁
     return parts.join('/');
 }
 
 /* 2026.11.13 修正：％は整数3桁入力後、4桁目から小数点「.」を表示する */
+/* 2026.11.13 変更：「/」（または「.」）を区切りとして入力可能にし、100/00 → 100.00 と表示する。
+   区切りを打たない場合は、従来どおり4桁目から自動で「.」を入れる。 */
 function formatPercentDigits(raw){
-    const d=digitsOnly(raw).slice(0,5);
+    const s=toHalfWidth(String(raw || '')).replace(/[^0-9/.]/g,'');
+    const m=s.search(/[/.]/);
+    if(m>=0){
+        const intPart=s.slice(0,m).replace(/[^0-9]/g,'').slice(0,3);
+        const decPart=s.slice(m+1).replace(/[^0-9]/g,'').slice(0,2);
+        return intPart+'.'+decPart;
+    }
+    const d=s.slice(0,5);
     return d.length>3 ? d.slice(0,3)+'.'+d.slice(3,5) : d;
 }
 
@@ -579,6 +593,8 @@ function onCombinedInput(el, kind){
                 if(count===digitsBefore) break;
             }
         }
+        // 2026.11.13 追加：％欄で末尾に入力した場合は、自動で入る「.」の後ろ（末尾）へカーソルを置く
+        if(kind==='percent' && pos>=oldValue.length) newPos=el.value.length;
         try{ el.setSelectionRange(newPos,newPos); }catch(e){}
     }
     syncCombinedToLegacy();
@@ -588,10 +604,11 @@ function onCombinedInput(el, kind){
 /* 2026.11.13 修正：％は小数1桁を右側0埋め。100％未満は100.00へ補正 */
 function finalizeCombinedPercent(){
     const el=document.getElementById('basePercentInput');
-    let d=digitsOnly(el.value);
-    if(!d){ el.value=''; syncCombinedToLegacy(); saveAndCalc(); return; }
-    const integer=d.slice(0,3);
-    let decimal=d.slice(3,5);
+    /* 2026.11.13 変更：表示中の「.」位置で整数部・小数部を分ける（100/05 や 10/55 を正しく判定するため） */
+    const parts=el.value.split('.');
+    const integer=digitsOnly(parts[0]).slice(0,3);
+    let decimal=digitsOnly(parts[1] || '').slice(0,2);
+    if(!integer && !decimal){ el.value=''; syncCombinedToLegacy(); saveAndCalc(); return; }
     const intValue=parseInt(integer || '0',10);
     if(integer.length<3 || intValue<100){
         el.value='100.00';
@@ -656,8 +673,7 @@ function keypadShow(el){
     keypadField=el;
     keypadEl.classList.add('open');
     document.body.classList.add('kp-open');
-    // ％欄では「/」は使わないので無効化
-    document.getElementById('kpSlash').disabled=(el.id==='basePercentInput');
+    // 2026.11.13 変更：％欄でも「/」を使うため、無効化は廃止
     setTimeout(()=>{ try{ el.scrollIntoView({block:'center',behavior:'smooth'}); }catch(e){} },50);
 }
 
@@ -670,7 +686,6 @@ function keypadHide(){
 function keypadInsert(ch){
     const el=keypadField;
     if(!el) return;
-    if(ch==='/' && el.id==='basePercentInput') return;
     // 選択中（フォーカス直後は全選択）なら置き換え、そうでなければカーソル位置に挿入
     el.setRangeText(ch, el.selectionStart, el.selectionEnd, 'end');
     el.dispatchEvent(new Event('input',{bubbles:true}));
