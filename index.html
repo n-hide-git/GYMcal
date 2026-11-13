@@ -113,6 +113,38 @@ input:focus {
     display: none;
 }
 
+
+/* 2026.11.13 追加：タイム・％を1つの入力欄で入力する統合表示 */
+.combined-input {
+    width: 100%;
+    padding: 1px 5px;
+    box-sizing: border-box;
+    text-align: center;
+    border: 2px solid #888;
+    border-radius: 6px;
+    font-size: 3.2em;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+    font-family: inherit;
+    background: #fff;
+}
+.combined-input:focus {
+    background: #fff9c4;
+    outline: none;
+    border-color: #d4b800;
+}
+.input-hint {
+    margin: 2px 0 8px;
+    color: #777;
+    font-size: 0.85em;
+    text-align: right;
+}
+/* 2026.11.13 追加：旧入力欄は保存データ互換と既存計算ロジック維持のため内部保持 */
+.legacy-fields { display: none !important; }
+@media (max-width: 480px) {
+    .combined-input { font-size: 2.7em; }
+}
+
 #result {
     /* 2026.07.21 変更: 余白を約半分に(20px→10px) */
     margin-top: 10px;
@@ -187,61 +219,32 @@ th, td {
 
 <body>
 
-<h3><span class="sub-title">2026.09.29 さらに地道に更新中：nakaZ</span><br>「良く見える！モトジムTOP比」</h3>
+<h3><span class="sub-title">2026.11.13 入力をカンタンに　nakaZ　Ver.5.0</span><br>「良く見える！モトジムTOP比」</h3>
     
 
-<label>TOPタイム</label>
-<div class="row-3">
-    <div>
-        <input type="number" inputmode="numeric" id="topM" placeholder="分" oninput="limitMinute(this)" onblur="padOnBlurZero(this,1)">
-    </div>
+<!-- 2026.11.13 変更：分・秒・ミリ秒を1つの入力欄に統合 -->
+<label for="topTimeInput">TOPタイム</label>
+<input class="combined-input" type="text" inputmode="numeric" autocomplete="off"
+       id="topTimeInput" placeholder="00/00/000" aria-label="TOPタイム 分 秒 ミリ秒">
+<div class="input-hint" id="topTimeInterpretation">入力例：1/20/333 → 1分20秒333</div>
 
-    <div class="digit-guide" data-placeholder="2桁">
-        <input type="number" inputmode="numeric" id="topS" placeholder="秒"
-       min="0" max="59"
-       oninput="limit(this,2)" onblur="padOnBlurZero(this,2)">
-    </div>
+<!-- 2026.11.13 変更：％の整数・小数を1つの入力欄に統合 -->
+<label for="basePercentInput">TOPタイムの％設定</label>
+<input class="combined-input" type="text" inputmode="numeric" autocomplete="off"
+       id="basePercentInput" placeholder="100.00" aria-label="TOPタイムの％設定">
+<div class="input-hint">例：100.01 → 100.01％　・　100.1 → 100.10％</div>
 
-    <div class="digit-guide" data-placeholder="3桁">
-        <input type="number" inputmode="numeric" id="topMs" placeholder="ミリ"
-               oninput="limit(this,3)" onblur="padOnBlurZero(this,3)">
-    </div>
-</div>
+<!-- 2026.11.13 変更：自分の分・秒・ミリ秒を1つの入力欄に統合 -->
+<label for="myTimeInput">自分のタイム</label>
+<input class="combined-input" type="text" inputmode="numeric" autocomplete="off"
+       id="myTimeInput" placeholder="00/00/000" aria-label="自分のタイム 分 秒 ミリ秒">
+<div class="input-hint" id="myTimeInterpretation">入力例：1/20/333 → 1分20秒333</div>
 
-<label>TOPタイムを何％に設定？</label>
-<div class="row-2">
-    <div>
-        <input type="number" inputmode="numeric" id="baseP_int"
-               placeholder="整数"
-               oninput="limit(this,3)" onblur="checkPercentMin()">
-    </div>
-
-    <div class="digit-guide" data-placeholder="2桁">
-        <input type="number" inputmode="numeric" id="baseP_dec"
-               placeholder="小数"
-               oninput="limit(this,2)" onblur="padOnBlurZero(this,2); checkPercentMin();">
-    </div>
-</div>
-
-<label>自分のタイム</label>
-<div class="row-3">
-    <div>
-        <input type="number" inputmode="numeric" id="myM"
-               placeholder="分"
-               oninput="limitMinute(this)" onblur="padOnBlurZero(this,1)">
-    </div>
-
-    <div class="digit-guide" data-placeholder="2桁">
-        <input type="number" inputmode="numeric" id="myS" placeholder="秒"
-       min="0" max="59"
-       oninput="limit(this,2)" onblur="padOnBlurZero(this,2)">
-    </div>
-
-    <div class="digit-guide" data-placeholder="3桁">
-        <input type="number" inputmode="numeric" id="myMs"
-               placeholder="ミリ"
-               oninput="limit(this,3)" onblur="padOnBlurZero(this,3)">
-    </div>
+<!-- 2026.11.13 追加：既存localStorageキーと計算ロジックを維持する内部用の旧入力欄 -->
+<div class="legacy-fields" aria-hidden="true">
+  <input id="topM"><input id="topS"><input id="topMs">
+  <input id="baseP_int"><input id="baseP_dec">
+  <input id="myM"><input id="myS"><input id="myMs">
 </div>
 
 <button type="button" id="doneBtn" onclick="finishInput()">全て入力済</button>
@@ -384,81 +387,191 @@ function finishInput(){
     saveAndCalc();
 }
 
+/* 2026.11.13 変更：従来の保存キーをそのまま利用し、既存データとの互換性を維持 */
 function saveAndCalc(){
-
-    const ids=[
-        'topM',
-        'topS',
-        'topMs',
-        'baseP_int',
-        'baseP_dec',
-        'myM',
-        'myS',
-        'myMs'
-    ];
-
-    ids.forEach(id=>{
-        localStorage.setItem(
-            id,
-            document.getElementById(id).value
-        );
-    });
-
+    if(document.getElementById('topTimeInput')) syncCombinedToLegacy();
+    const ids=['topM','topS','topMs','baseP_int','baseP_dec','myM','myS','myMs'];
+    ids.forEach(id=>localStorage.setItem(id,document.getElementById(id).value));
     calculate();
 }
 
-/* 2026.07.17 追加: Enterキーで次の入力欄へフォーカスを移動する */
-const fieldOrder=[
-    'topM',
-    'topS',
-    'topMs',
-    'baseP_int',
-    'baseP_dec',
-    'myM',
-    'myS',
-    'myMs'
-];
+/* 2026.11.13 変更：Enterキーで統合入力欄の次へ移動 */
+const fieldOrder=['topTimeInput','basePercentInput','myTimeInput'];
 
 function focusNext(currentId){
-
     const idx=fieldOrder.indexOf(currentId);
     const nextId=fieldOrder[idx+1];
+    if(nextId) document.getElementById(nextId).focus();
+    else document.getElementById(currentId).blur();
+}
 
-    if(nextId){
-        document.getElementById(nextId).focus();
-    }else{
-        document.getElementById(currentId).blur();
+/* 2026.11.13 追加：統合入力欄の整形・旧保存データ変換
+   既存の topM 等のlocalStorageキーは変更せず、従来の計算関数 calculate() を利用する。 */
+function digitsOnly(value){
+    return toHalfWidth(String(value || '')).replace(/[^0-9]/g,'');
+}
+
+/* 2026.11.13 修正：タイムは「/」をユーザーが入力。各区分の桁数を制限する */
+function formatTimeDigits(raw){
+    const parts=toHalfWidth(String(raw || '')).replace(/[^0-9/]/g,'').split('/').slice(0,3);
+    if(parts.length>0) parts[0]=parts[0].slice(0,3); // 分
+    if(parts.length>1) parts[1]=parts[1].slice(0,2); // 秒
+    if(parts.length>2) parts[2]=parts[2].slice(0,3); // ミリ秒：最大3桁
+    return parts.join('/');
+}
+
+/* 2026.11.13 修正：％は整数3桁入力後、4桁目から小数点「.」を表示する */
+function formatPercentDigits(raw){
+    const d=digitsOnly(raw).slice(0,5);
+    return d.length>3 ? d.slice(0,3)+'.'+d.slice(3,5) : d;
+}
+
+/* 2026.11.13 修正：入力中は「/」、入力欄から離れた後は「分・秒」表記に切り替える */
+function timeInputToJapanese(raw){
+    const parts=String(raw || '').split('/');
+    if(parts.length!==3 || parts.some(part=>part==='')) return raw;
+    const minute=Number(parts[0]);
+    const second=Number(parts[1]);
+    const milliText=String(parts[2]).padEnd(3,'0');
+    const milli=Number(milliText);
+    if(!Number.isFinite(minute) || !Number.isFinite(second) || !Number.isFinite(milli) || second>59) return raw;
+    return `${minute}分${String(second).padStart(2,'0')}秒${String(milli).padStart(3,'0')}`;
+}
+
+function japaneseToTimeInput(raw){
+    const match=String(raw || '').match(/^(\\d+)分(\\d+)秒(\\d{1,3})$/);
+    if(!match) return raw;
+    return `${match[1]}/${match[2]}/${match[3]}`;
+}
+
+/* 2026.11.13 修正：入力欄以外のタイム表示は「分・秒・ミリ秒」表記。入力時のみ「/」を使用 */
+function updateTimeInterpretation(inputId, outputId){
+    const raw=document.getElementById(inputId).value;
+    const parts=raw.split('/');
+    const output=document.getElementById(outputId);
+    if(parts.length!==3 || parts.some(part=>part==='')){
+        output.textContent='解釈：分・秒・ミリ秒を「/」で入力';
+        return;
     }
+    const minute=Number(parts[0]);
+    const second=Number(parts[1]);
+    const milli=Number(parts[2].padEnd(3,'0'));
+    if(second>59){
+        output.textContent='解釈：秒は59以下で入力してください';
+        return;
+    }
+    output.textContent=`${minute}分${String(second).padStart(2,'0')}秒${String(milli).padStart(3,'0')}`;
 }
 
-/* 2026.09.29 追加: 欄をタップする度に中身を全選択する。
-   旧: onfocus="this.select()" はフォーカスが「移った瞬間」しか動かないため、
-   入力直後に同じ欄を再タップしても選択されず、カーソルが末尾に置かれるだけだった。
-   その状態で数字を打つと既存値の後ろに追記→limit()の桁数切り詰めで新しい数字が
-   消され「値が変えられない」ように見えていた（分欄は2桁で'0'リセット）。
-   また、スマホではfocus直後のtouchendで選択が解除されることがあるため、
-   setTimeoutで一拍置いてから選択する。 */
-function selectAllLater(el){
-
-    setTimeout(()=>el.select(), 0);
+function setLegacyTime(prefix, formatted){
+    // 「分/秒/ミリ秒」の3区分を、区分ごとに数値として読み取る
+    const parts=String(formatted || '').split('/');
+    const minute=digitsOnly(parts[0] || '').slice(0,3);
+    const second=digitsOnly(parts[1] || '').slice(0,2);
+    const milli=digitsOnly(parts[2] || '').slice(0,3);
+    // 秒は従来仕様どおり59秒を上限とする
+    const safeSec=(second && Number(second)>59) ? '59' : second;
+    // ミリ秒は入力桁を右側0埋め（33 → 330）
+    const safeMs=milli ? milli.padEnd(3,'0') : '';
+    document.getElementById(prefix+'M').value=minute;
+    document.getElementById(prefix+'S').value=safeSec;
+    document.getElementById(prefix+'Ms').value=safeMs;
 }
 
-fieldOrder.forEach(id=>{
+// 2026.11.13 修正：％表示は「100.00」。旧形式「100/00」も読み取り可能にする
+function setLegacyPercent(formatted){
+    const parts=String(formatted || '').split(/[./]/);
+    const integer=digitsOnly(parts[0]).slice(0,6);
+    const decimal=digitsOnly(parts[1] || '').slice(0,2);
+    document.getElementById('baseP_int').value=integer;
+    document.getElementById('baseP_dec').value=decimal;
+}
 
-    const el=document.getElementById(id);
+function syncCombinedToLegacy(){
+    setLegacyTime('top',document.getElementById('topTimeInput').value);
+    setLegacyPercent(document.getElementById('basePercentInput').value);
+    setLegacyTime('my',document.getElementById('myTimeInput').value);
+    updateTimeInterpretation('topTimeInput','topTimeInterpretation');
+    updateTimeInterpretation('myTimeInput','myTimeInterpretation');
+}
 
-    el.addEventListener('focus', ()=>selectAllLater(el));
-    el.addEventListener('click', ()=>selectAllLater(el));
-
-    el.addEventListener('keydown', e=>{
-
-        /* 2026.07.16 追加: IME（全角モード）の変換確定Enterと区別する。
-           isComposing中、またはキーコード229（IME確定時のEnter）は
-           欄移動として扱わない */
-        if(e.isComposing || e.keyCode === 229){
-            return;
+/* 2026.11.13 追加：入力途中でも旧形式へ反映し、従来処理で即時計算・保存 */
+function onCombinedInput(el, kind){
+    const oldValue=el.value;
+    const pos=el.selectionStart || oldValue.length;
+    const digitsBefore=digitsOnly(oldValue.slice(0,pos)).length;
+    const formatted=(kind==='percent') ? formatPercentDigits(oldValue) : formatTimeDigits(oldValue);
+    el.value=formatted;
+    // ％欄は自動挿入した「/」の後ろへカーソルを移動。
+    // タイム欄はユーザーが「/」を入力するため、通常はカーソル位置を変更しない。
+    if(kind==='percent' || formatted!==oldValue){
+        let newPos=0, count=0;
+        if(digitsBefore>0){
+            for(let i=0;i<el.value.length;i++){
+                if(/[0-9]/.test(el.value[i])) count++;
+                newPos=i+1;
+                if(count===digitsBefore) break;
+            }
         }
+        try{ el.setSelectionRange(newPos,newPos); }catch(e){}
+    }
+    syncCombinedToLegacy();
+    saveAndCalc();
+}
 
+/* 2026.11.13 修正：％は小数1桁を右側0埋め。100％未満は100.00へ補正 */
+function finalizeCombinedPercent(){
+    const el=document.getElementById('basePercentInput');
+    let d=digitsOnly(el.value);
+    if(!d){ el.value=''; syncCombinedToLegacy(); saveAndCalc(); return; }
+    const integer=d.slice(0,3);
+    let decimal=d.slice(3,5);
+    const intValue=parseInt(integer || '0',10);
+    if(integer.length<3 || intValue<100){
+        el.value='100.00';
+    }else{
+        decimal=decimal.padEnd(2,'0');
+        el.value=integer+'.'+decimal;
+    }
+    syncCombinedToLegacy();
+    saveAndCalc();
+}
+
+/* 2026.11.13 追加：旧localStorageデータを統合欄へ読み替える */
+function loadCombinedInputs(){
+    const get=id=>localStorage.getItem(id) || '';
+    // 旧データは分1桁・秒2桁・ミリ秒3桁で保存されていたため、各要素を個別に桁合わせ
+    const top=[get('topM').padStart(2,'0'),get('topS').padStart(2,'0'),get('topMs').padStart(3,'0')].join('');
+    const mine=[get('myM').padStart(2,'0'),get('myS').padStart(2,'0'),get('myMs').padStart(3,'0')].join('');
+    const pInt=get('baseP_int'), pDec=get('baseP_dec');
+    document.getElementById('topTimeInput').value=(get('topM') || get('topS') || get('topMs')) ? [get('topM').padStart(2,'0'),get('topS').padStart(2,'0'),get('topMs').padStart(3,'0')].join('/') : '';
+    document.getElementById('myTimeInput').value=(get('myM') || get('myS') || get('myMs')) ? [get('myM').padStart(2,'0'),get('myS').padStart(2,'0'),get('myMs').padStart(3,'0')].join('/') : '';
+    document.getElementById('basePercentInput').value=pInt ? (pInt+'.'+String(pDec || '0').padEnd(2,'0')) : '';
+    syncCombinedToLegacy();
+    calculate();
+    // 初期表示は日本語形式。編集のためにフォーカスすると「/」形式へ戻す
+    document.getElementById('topTimeInput').value=timeInputToJapanese(document.getElementById('topTimeInput').value);
+    document.getElementById('myTimeInput').value=timeInputToJapanese(document.getElementById('myTimeInput').value);
+}
+
+/* 2026.11.13 変更：統合欄をタップしたら全選択、Enterで次の欄へ移動 */
+fieldOrder.forEach((id,index)=>{
+    const el=document.getElementById(id);
+    el.addEventListener('focus',()=>{
+        if(id!=='basePercentInput') el.value=japaneseToTimeInput(el.value);
+        setTimeout(()=>el.select(),0);
+    });
+    el.addEventListener('click',()=>setTimeout(()=>el.select(),0));
+    el.addEventListener('input',()=>onCombinedInput(el,id==='basePercentInput'?'percent':'time'));
+    el.addEventListener('blur',()=>{
+        if(id==='basePercentInput') finalizeCombinedPercent();
+        else if(el.value){
+            syncCombinedToLegacy(); saveAndCalc();
+            el.value=timeInputToJapanese(el.value);
+        }
+    });
+    el.addEventListener('keydown',e=>{
+        if(e.isComposing || e.keyCode===229) return;
         if(e.key==='Enter'){
             e.preventDefault();
             focusNext(id);
@@ -467,38 +580,36 @@ fieldOrder.forEach(id=>{
 });
 
 window.onload=()=>{
-
-    fieldOrder.forEach(id=>{
-
-        const val=localStorage.getItem(id);
-
-        if(val){
-            document.getElementById(id).value=val;
-        }
-    });
-
-    calculate();
+    loadCombinedInputs();
 };
+
+/* 2026.11.13 修正：統合入力欄の値を直接ミリ秒へ変換する
+   入力中の「分/秒/ミリ秒」と、フォーカスを外した後の「分・秒・ミリ秒」の両方に対応 */
+function combinedTimeToMs(inputId, prefix){
+    const raw=String(document.getElementById(inputId).value || '').trim();
+    let match=raw.match(/^(\d+)\/(\d{1,2})\/(\d{1,3})$/);
+    if(!match) match=raw.match(/^(\d+)分(\d{1,2})秒(\d{1,3})$/);
+    if(match){
+        const minute=Number(match[1]);
+        const second=Number(match[2]);
+        const milli=Number(String(match[3]).padEnd(3,'0'));
+        if(second>59) return 0;
+        return minute*60000+second*1000+milli;
+    }
+    // 旧保存データとの互換用。統合欄が未入力の場合のみ旧欄を参照
+    return Number(document.getElementById(prefix+'M').value||0)*60000+
+           Number(document.getElementById(prefix+'S').value||0)*1000+
+           Number(document.getElementById(prefix+'Ms').value||0);
+}
 
 function calculate(){
 
-    const topMs=
+    const topMs=combinedTimeToMs('topTimeInput','top');
+    const myMs=combinedTimeToMs('myTimeInput','my');
 
-        (parseInt(document.getElementById('topM').value||0)*60000)+
-        (parseInt(document.getElementById('topS').value||0)*1000)+
-        parseInt(document.getElementById('topMs').value||0);
-
-    const myMs=
-
-        (parseInt(document.getElementById('myM').value||0)*60000)+
-        (parseInt(document.getElementById('myS').value||0)*1000)+
-        parseInt(document.getElementById('myMs').value||0);
-
-    const baseP=parseFloat(
-        (document.getElementById('baseP_int').value||0)
-        + "."
-        + (document.getElementById('baseP_dec').value||0)
-    );
+    const basePInt=Number(document.getElementById('baseP_int').value||0);
+    const basePDec=String(document.getElementById('baseP_dec').value||'0').padEnd(2,'0').slice(0,2);
+    const baseP=basePInt+Number(basePDec)/100;
 
     const tbody=document.getElementById('tableBody');
     const onePercentEl=document.getElementById('onePercent');
@@ -515,14 +626,16 @@ function calculate(){
         return;
     }
 
-    const virtual100Ms=
-        topMs/(baseP/100);
+    // 2026.11.13 修正：TOP％補正を先に行い、100％相当タイムを求める。
+    // 例：TOP 62.300秒が100.30％の場合
+    // 62.300 ÷ 1.003 ＝ 62.113659...秒（これが100％基準タイム）
+    // 100.3％の補正を忘れると、1％表示もあなたの％も誤った値になる。
+    const virtual100Ms = topMs / (baseP / 100);
 
-    const onePercentSec=
-        (virtual100Ms/100)/1000;
-
-    onePercentEl.innerText=
-        `1％ ＝ ${onePercentSec.toFixed(2)}秒`;
+    // 1％あたりの時間は、補正後の100％基準タイムを100で割る。
+    // 内部計算では丸めず、表示時だけ小数第2位に四捨五入する。
+    const onePercentSec = virtual100Ms / 100 / 1000;
+    onePercentEl.innerText = `1％ ＝ ${onePercentSec.toFixed(2)}秒`;
 
     const rates=[
         100,
@@ -553,7 +666,7 @@ function calculate(){
         <tr>
             <td>${r}％</td>
             <td>
-                ${m}:${s.toString().padStart(2,'0')}.${mil.toString().padStart(3,'0')}
+                ${m}分${s.toString().padStart(2,'0')}秒${mil.toString().padStart(3,'0')}
             </td>
         </tr>`;
     });
@@ -562,9 +675,10 @@ function calculate(){
 
     if(myMs>0){
 
-        const myPercent=
-            ((myMs/virtual100Ms)*100)
-            .toFixed(2);
+        // 2026.11.13 修正：自分のタイムも補正後の100％基準タイムと比較する。
+        // 途中の秒数・1％表示値では丸めず、最後の表示時だけ小数第2位にする。
+        // 例：83.555秒 ÷ 62.113659...秒 × 100 ＝ 134.52％
+        const myPercent = ((myMs / virtual100Ms) * 100).toFixed(2);
 
         resultEl.innerText=
             `あなたの％: ${myPercent}％`;
