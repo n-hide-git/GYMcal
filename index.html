@@ -1,4 +1,4 @@
-<!-- /* 2026.09.29 nakaZ /* -->
+<!-- /* 2026.11.13 nakaZ /* -->
 
 <html lang="ja">
 <head>
@@ -145,6 +145,47 @@ input:focus {
     .combined-input { font-size: 2.7em; }
 }
 
+/* ===== 2026.11.13 追加：スマホ用 独自キーパッド（「/」が打てない問題の対策） ===== */
+#keypad {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    background: #d1d5db;
+    padding: 6px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom));
+    z-index: 1000;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.25);
+    user-select: none;
+    -webkit-user-select: none;
+}
+#keypad.open { display: block; }
+#keypad .kp-grid {
+    max-width: 500px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+#keypad button {
+    height: 52px;
+    font-size: 1.6em;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background: #fff;
+    color: #222;
+    touch-action: manipulation;
+}
+#keypad button:active { background: #fff9c4; }
+#keypad button.kp-fn { background: #9aa3ad; color: #fff; font-size: 1.2em; }
+#keypad button.kp-slash { background: #004a99; color: #fff; }
+#keypad button.kp-wide { grid-column: span 2; }
+#keypad button:disabled { opacity: 0.35; }
+/* キーパッド表示中は、隠れないよう下に余白を確保 */
+body.kp-open { padding-bottom: 280px; }
+
 #result {
     /* 2026.07.21 変更: 余白を約半分に(20px→10px) */
     margin-top: 10px;
@@ -222,21 +263,22 @@ th, td {
 <h3><span class="sub-title">2026.11.13 入力をカンタンに　nakaZ　Ver.5.0</span><br>「良く見える！モトジムTOP比」</h3>
     
 
+<!-- 2026.11.13 変更：3つの入力欄とも inputmode="numeric" → "none"（標準キーボードを出さず、下の独自キーパッドで入力） -->
 <!-- 2026.11.13 変更：分・秒・ミリ秒を1つの入力欄に統合 -->
 <label for="topTimeInput">TOPタイム</label>
-<input class="combined-input" type="text" inputmode="numeric" autocomplete="off"
+<input class="combined-input" type="text" inputmode="none" autocomplete="off"
        id="topTimeInput" placeholder="00/00/000" aria-label="TOPタイム 分 秒 ミリ秒">
 <div class="input-hint" id="topTimeInterpretation">入力例：1/20/333 → 1分20秒333</div>
 
 <!-- 2026.11.13 変更：％の整数・小数を1つの入力欄に統合 -->
 <label for="basePercentInput">TOPタイムの％設定</label>
-<input class="combined-input" type="text" inputmode="numeric" autocomplete="off"
+<input class="combined-input" type="text" inputmode="none" autocomplete="off"
        id="basePercentInput" placeholder="100.00" aria-label="TOPタイムの％設定">
 <div class="input-hint">例：100.01 → 100.01％　・　100.1 → 100.10％</div>
 
 <!-- 2026.11.13 変更：自分の分・秒・ミリ秒を1つの入力欄に統合 -->
 <label for="myTimeInput">自分のタイム</label>
-<input class="combined-input" type="text" inputmode="numeric" autocomplete="off"
+<input class="combined-input" type="text" inputmode="none" autocomplete="off"
        id="myTimeInput" placeholder="00/00/000" aria-label="自分のタイム 分 秒 ミリ秒">
 <div class="input-hint" id="myTimeInterpretation">入力例：1/20/333 → 1分20秒333</div>
 
@@ -261,6 +303,30 @@ th, td {
     </thead>
     <tbody id="tableBody"></tbody>
 </table>
+
+<!-- 2026.11.13 追加：スマホ用 独自キーパッド（数字・「/」・⌫・次へ・閉じる） -->
+<div id="keypad" aria-label="入力キーパッド">
+  <div class="kp-grid">
+    <button type="button" data-key="7">7</button>
+    <button type="button" data-key="8">8</button>
+    <button type="button" data-key="9">9</button>
+    <button type="button" data-key="back" class="kp-fn">⌫</button>
+
+    <button type="button" data-key="4">4</button>
+    <button type="button" data-key="5">5</button>
+    <button type="button" data-key="6">6</button>
+    <button type="button" data-key="/" id="kpSlash" class="kp-slash">/</button>
+
+    <button type="button" data-key="1">1</button>
+    <button type="button" data-key="2">2</button>
+    <button type="button" data-key="3">3</button>
+    <button type="button" data-key="next" class="kp-fn">次へ</button>
+
+    <button type="button" data-key="0">0</button>
+    <button type="button" data-key="00">00</button>
+    <button type="button" data-key="close" class="kp-fn kp-wide">閉じる</button>
+  </div>
+</div>
 
 <script>
 
@@ -577,6 +643,84 @@ fieldOrder.forEach((id,index)=>{
             focusNext(id);
         }
     });
+});
+
+/* ===== 2026.11.13 追加：スマホ用 独自キーパッド =====
+   標準キーボードに「/」が無い問題への対策。
+   入力欄は inputmode="none" で標準キーボードを出さず、画面下のキーパッドから入力する。
+   キー入力後は 'input' イベントを発火し、既存の onCombinedInput() → 計算・保存の流れをそのまま利用する。 */
+const keypadEl=document.getElementById('keypad');
+let keypadField=null;
+
+function keypadShow(el){
+    keypadField=el;
+    keypadEl.classList.add('open');
+    document.body.classList.add('kp-open');
+    // ％欄では「/」は使わないので無効化
+    document.getElementById('kpSlash').disabled=(el.id==='basePercentInput');
+    setTimeout(()=>{ try{ el.scrollIntoView({block:'center',behavior:'smooth'}); }catch(e){} },50);
+}
+
+function keypadHide(){
+    keypadEl.classList.remove('open');
+    document.body.classList.remove('kp-open');
+    keypadField=null;
+}
+
+function keypadInsert(ch){
+    const el=keypadField;
+    if(!el) return;
+    if(ch==='/' && el.id==='basePercentInput') return;
+    // 選択中（フォーカス直後は全選択）なら置き換え、そうでなければカーソル位置に挿入
+    el.setRangeText(ch, el.selectionStart, el.selectionEnd, 'end');
+    el.dispatchEvent(new Event('input',{bubbles:true}));
+}
+
+function keypadBackspace(){
+    const el=keypadField;
+    if(!el) return;
+    let s=el.selectionStart;
+    const e=el.selectionEnd;
+    if(s===e){
+        if(s===0) return;
+        s--;
+        // ％欄の自動「.」は一緒に消して、その前の数字まで削除する
+        if(el.id==='basePercentInput' && el.value[s]==='.' && s>0) s--;
+    }
+    el.setRangeText('', s, e, 'end');
+    el.dispatchEvent(new Event('input',{bubbles:true}));
+}
+
+function keypadNext(){
+    if(keypadField) focusNext(keypadField.id);
+}
+
+function keypadClose(){
+    finishInput();
+    keypadHide();
+}
+
+fieldOrder.forEach(id=>{
+    const el=document.getElementById(id);
+    el.addEventListener('focus',()=>keypadShow(el));
+    // 入力欄以外へフォーカスが移った場合のみキーパッドを閉じる
+    el.addEventListener('blur',()=>setTimeout(()=>{
+        const a=document.activeElement;
+        if(!(a && fieldOrder.includes(a.id))) keypadHide();
+    },100));
+});
+
+// キーパッドをタップしても入力欄のフォーカスが外れないようにする
+keypadEl.addEventListener('mousedown',e=>e.preventDefault());
+
+keypadEl.addEventListener('click',e=>{
+    const b=e.target.closest('button');
+    if(!b || b.disabled) return;
+    const k=b.dataset.key;
+    if(k==='back') keypadBackspace();
+    else if(k==='next') keypadNext();
+    else if(k==='close') keypadClose();
+    else keypadInsert(k);
 });
 
 window.onload=()=>{
