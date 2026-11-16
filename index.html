@@ -507,10 +507,13 @@ function formatPercentDigits(raw){
 }
 
 /* 2026.11.13 修正：入力中は「/」、入力欄から離れた後は「分・秒」表記に切り替える */
+/* 2026.11.16 変更：分・ミリ秒の省略入力に対応
+   例）/22/0 → 0分22秒000
+   分が空欄なら0分、ミリ秒は右側を0埋めして3桁表示する。 */
 function timeInputToJapanese(raw){
     const parts=String(raw || '').split('/');
-    if(parts.length!==3 || parts.some(part=>part==='')) return raw;
-    const minute=Number(parts[0]);
+    if(parts.length!==3 || parts[1]==='' || parts[2]==='') return raw;
+    const minute=Number(parts[0] || '0');
     const second=Number(parts[1]);
     const milliText=String(parts[2]).padEnd(3,'0');
     const milli=Number(milliText);
@@ -529,11 +532,12 @@ function updateTimeInterpretation(inputId, outputId){
     const raw=document.getElementById(inputId).value;
     const parts=raw.split('/');
     const output=document.getElementById(outputId);
-    if(parts.length!==3 || parts.some(part=>part==='')){
+    if(parts.length!==3 || parts[1]==='' || parts[2]===''){
         output.textContent='解釈：分・秒・ミリ秒を「/」で入力';
         return;
     }
-    const minute=Number(parts[0]);
+    // 2026.11.16 変更：分欄が空欄なら0分として扱う（例：/22/0）
+    const minute=Number(parts[0] || '0');
     const second=Number(parts[1]);
     const milli=Number(parts[2].padEnd(3,'0'));
     if(second>59){
@@ -746,10 +750,11 @@ window.onload=()=>{
    入力中の「分/秒/ミリ秒」と、フォーカスを外した後の「分・秒・ミリ秒」の両方に対応 */
 function combinedTimeToMs(inputId, prefix){
     const raw=String(document.getElementById(inputId).value || '').trim();
-    let match=raw.match(/^(\d+)\/(\d{1,2})\/(\d{1,3})$/);
+    // 2026.11.16 変更：分欄の省略（/22/0）を0分として受け付ける
+    let match=raw.match(/^(\d*)\/(\d{1,2})\/(\d{1,3})$/);
     if(!match) match=raw.match(/^(\d+)分(\d{1,2})秒(\d{1,3})$/);
     if(match){
-        const minute=Number(match[1]);
+        const minute=Number(match[1] || '0');
         const second=Number(match[2]);
         const milli=Number(String(match[3]).padEnd(3,'0'));
         if(second>59) return 0;
