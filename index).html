@@ -1,761 +1,863 @@
-<!DOCTYPE html>
+<!-- /* 2026.11.13 nakaZ /* -->
+
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>東海4県 AI・DX・製造関連イベントカレンダー 2026–2027</title>
+<title>良く見える！モトジムTOP比</title>
+<meta name="viewport" content="width=device-width, initial-scale=0.8">
+
 <style>
-:root{--ink:#172536;--muted:#64748b;--line:#dbe3ec;--bg:#f3f6fa;--blue:#174b78;--teal:#0f766e;--gold:#b7791f;--white:#fff}
-*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--ink);font-family:"Yu Gothic UI","Meiryo",sans-serif;line-height:1.65}
-header{background:linear-gradient(120deg,#102d49,#1b5c78);color:white;padding:34px max(22px,calc((100% - 1180px)/2)) 30px}
-.kicker{font-size:12px;letter-spacing:.16em;opacity:.8} h1{font-size:clamp(25px,4vw,38px);line-height:1.25;margin:9px 0 12px}
-header p{max-width:850px;margin:0;color:#e4edf4}
-.wrap{max-width:1180px;margin:auto;padding:22px}
-.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:white;border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 18px}
-.toolbar input,.toolbar select{padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;background:white}
-.toolbar input{flex:1;min-width:210px}.toolbar button{border:0;background:#e8eef5;color:#17324a;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700}
-.note{font-size:13px;color:var(--muted);margin:0 0 18px}
-.legend{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}.chip{font-size:12px;border-radius:99px;padding:4px 10px;background:#e8eef5;color:#24445e}
-.month{margin:25px 0 12px;display:flex;align-items:center;gap:12px}.month h2{font-size:22px;margin:0}.month:after{content:"";height:1px;background:var(--line);flex:1}
-.event{display:grid;grid-template-columns:180px 1fr;gap:0;background:white;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:12px 0;box-shadow:0 2px 8px #19324b0a}
-.visual{position:relative;min-height:170px;background:#dbe6ed}.visual img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover}.visual:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#102d49a8,transparent 65%)}
-.visual span{position:absolute;z-index:1;bottom:10px;left:12px;color:white;font-size:12px;font-weight:700;text-shadow:0 1px 3px #000}
-.content{padding:16px 18px}.topline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}
-.date{font-weight:800;color:#173f61;font-variant-numeric:tabular-nums}.venue{background:#edf3f7;border-radius:6px;padding:2px 8px}
-h3{font-size:19px;line-height:1.35;margin:7px 0}.content p{margin:6px 0 10px;font-size:14px}
-.tags{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.tag{font-size:11px;padding:3px 8px;border-radius:5px;background:#eef5f4;color:#17635c}
-.actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}.official{display:inline-block;background:var(--blue);color:white;text-decoration:none;padding:7px 12px;border-radius:7px;font-size:13px;font-weight:700}.official:hover{background:#0e385c}
-.status{font:inherit;font-size:13px;padding:6px 8px;border:1px solid #cbd5e1;border-radius:7px;background:white}.memo{font:inherit;font-size:13px;padding:7px 9px;border:1px solid #d5dde6;border-radius:7px;min-width:150px;flex:1}
-.priority{font-size:11px;font-weight:800;color:#9a5b09;background:#fff4dc;border-radius:5px;padding:3px 7px}
-.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:12px 0 24px}.calhead,.calcell{border-radius:8px;padding:7px;text-align:center;font-size:12px}.calhead{background:#dce7ef;font-weight:800}.calcell{background:white;border:1px solid var(--line);min-height:46px}.calcell strong{display:block;font-size:15px}.calcell small{display:block;color:var(--muted);font-size:10px}.calcell.has{border-color:#6b9bb5;background:#eaf4f8}
-.section-title{font-size:22px;margin:28px 0 10px}.venue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.venue-card{background:white;border:1px solid var(--line);border-radius:12px;padding:15px}.venue-card h3{font-size:16px;margin:0 0 4px}.venue-card p{font-size:13px;color:var(--muted);margin:0}
-footer{max-width:1180px;margin:20px auto;padding:20px 22px 40px;color:var(--muted);font-size:12px}
-@media(max-width:700px){.event{grid-template-columns:1fr}.visual{height:145px;min-height:145px}.venue-grid{grid-template-columns:1fr}.wrap{padding:14px}.content{padding:14px}.calendar{gap:3px}.calcell{padding:5px 2px}}
-@media print{body{background:white}.toolbar,.actions button{display:none!important}.wrap{max-width:none;padding:0 8mm}.event{break-inside:avoid;box-shadow:none}.official{background:white;color:#174b78;border:1px solid #174b78}header{padding:18px 8mm}.visual{min-height:115px}.venue-grid{break-inside:avoid}}
-
-/* 左側20%：全日付入り小型カレンダー／右側80%：独立スクロール */
-.planner-layout{display:grid;grid-template-columns:minmax(210px,20%) minmax(0,1fr);gap:18px;align-items:start}
-.calendar-sidebar{position:sticky;top:10px;height:calc(100vh - 20px);overflow-y:auto;background:#eaf0f5;border:1px solid var(--line);border-radius:13px;padding:10px}
-.sidebar-heading{font-size:16px;font-weight:800;color:#173f61}
-.sidebar-sub{font-size:10px;line-height:1.4;color:var(--muted);margin:3px 0 10px}
-#calendar .month{margin:12px 0 4px;display:block}
-#calendar .month h2{font-size:13px;margin:0;color:#24445e}
-#calendar .month:after{display:none}
-#calendar .calendar{grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;margin:4px 0 10px}
-#calendar .calhead,#calendar .calcell{border-radius:3px;padding:2px 0;text-align:center;font-size:9px;min-width:0}
-#calendar .calhead{background:#dce7ef}
-#calendar .calcell{min-height:23px;height:23px;border:1px solid #dbe3ec;background:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;line-height:1.05}
-#calendar .calcell strong{font-size:10px;line-height:1.1}
-#calendar .calcell small{font-size:7px;line-height:1;color:#17635c}
-#calendar .calcell.has{background:#cfe7f1;border-color:#6b9bb5;color:#123d5b;font-weight:800;cursor:pointer}
-#calendar .calcell.has:hover{background:#a9d2e3}
-#calendar .calcell.empty{background:transparent;border-color:transparent}
-.event-scroll{height:calc(100vh - 20px);overflow-y:auto;overscroll-behavior:contain;padding:0 5px 24px 0;scroll-behavior:smooth}
-.event-scroll>.section-title:first-child{margin-top:2px}
-.event{scroll-margin-top:12px}
-@media(max-width:760px){
- .planner-layout{grid-template-columns:1fr;gap:12px}
- .calendar-sidebar{position:relative;top:auto;height:auto;max-height:260px}
- #calendar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
- #calendar .month{margin:5px 0}
- .event-scroll{height:auto;overflow:visible;padding:0}
-}
-@media print{
- .planner-layout{display:block}
- .calendar-sidebar{position:static;height:auto;overflow:visible;margin-bottom:16px}
- #calendar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
- .event-scroll{height:auto;overflow:visible}
+/* 2026.07.21 変更: 余白を約半分に(padding 20px→10px) */
+body {
+    font-family: sans-serif;
+    padding: 10px;
+    max-width: 500px;
+    margin: auto;
 }
 
-
-/* 2026-11-11 調整：上部見出しをコンパクト化し、画面上部に固定 */
-:root{--header-height:108px}
-header{
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  z-index:1000;
-  padding:12px max(22px,calc((100% - 1180px)/2)) 11px;
-  box-shadow:0 2px 10px #102d4922;
-}
-header .kicker{font-size:10px;line-height:1.2}
-header h1{
-  font-size:clamp(19px,2.5vw,27px);
-  line-height:1.18;
-  margin:4px 0 5px;
-}
-header p{font-size:12px;line-height:1.35}
-main.wrap{margin-top:var(--header-height)}
-@media(max-width:760px){
-  :root{--header-height:132px}
-  header{padding:10px 14px}
-  header h1{font-size:19px;margin:4px 0}
-  header p{font-size:11px}
+h3 {
+    text-align: center;
+    font-size: 1.6em;
+    color: #004a99;
+    /* 2026.07.21 変更: 余白を約半分に(20px→10px) */
+    margin-bottom: 10px;
+    white-space: nowrap;
 }
 
+    
+/* 2026.07.21 追加: h3の1行目(サブタイトル部分)を2行目より小さく表示 */
+.sub-title {
+    font-size: 0.6em;
+    color: #666;
+    font-weight: normal;
+}
 
-/* 2026-11-12 refresh: compact fixed control strip; maximize event reading area */
-:root{--fixed-top:126px}
-header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:9px 18px 8px;box-shadow:0 2px 12px #102d4930}
-header .kicker{font-size:9px;line-height:1.1}
-header h1{font-size:19px;line-height:1.1;margin:2px 0 3px}
-header p{font-size:11px;line-height:1.25;margin:0;max-width:none}
-header .toolbar{margin:7px auto 0;max-width:1400px;padding:5px 7px;border:0;border-radius:8px;gap:6px;background:#ffffff18}
-header .toolbar input,header .toolbar select{font-size:12px;padding:5px 8px;min-height:30px}
-header .toolbar input{min-width:150px}
-header .toolbar button{font-size:11px;padding:6px 9px;min-height:30px}
-main.wrap{max-width:none;margin:var(--fixed-top) 0 0;padding:10px 14px 0}
-.note{font-size:11px;margin:0 0 4px}.legend{margin:0 0 5px;gap:5px}.chip{font-size:10px;padding:2px 7px}
-.planner-layout{grid-template-columns:minmax(180px,17%) minmax(0,1fr);gap:12px}
-.calendar-sidebar{top:calc(var(--fixed-top) + 6px);height:calc(100vh - var(--fixed-top) - 12px);padding:8px}
-.event-scroll{height:calc(100vh - var(--fixed-top) - 10px);padding:0 8px 28px 0}
-.event{grid-template-columns:minmax(190px,22%) minmax(0,1fr);margin:8px 0;border-radius:11px}
-.visual{min-height:190px}.content{padding:14px 17px}.content p{font-size:13px;line-height:1.5}
-.content h3{font-size:18px}
-#calendar .month{margin:8px 0 3px}#calendar .calcell{height:21px;min-height:21px}
-#calendar .calcell.has{cursor:pointer}
-.event.jump-highlight{outline:3px solid #e69b24;box-shadow:0 0 0 5px #e69b2428}
-@media(max-width:760px){:root{--fixed-top:184px}header{padding:8px 10px}header h1{font-size:17px}header p{font-size:10px}header .toolbar{gap:4px}header .toolbar input{min-width:100%;flex-basis:100%}header .toolbar select{flex:1;min-width:0}.planner-layout{grid-template-columns:1fr}.calendar-sidebar{top:auto;height:155px;max-height:155px;overflow:auto}#calendar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.event-scroll{height:auto;max-height:none;overflow:visible}.event{grid-template-columns:1fr}.visual{height:145px;min-height:145px}main.wrap{padding:8px 10px}}
-@media print{header{position:static;box-shadow:none}main.wrap{margin:0}.planner-layout{display:block}.calendar-sidebar{position:static;height:auto;overflow:visible}.event-scroll{height:auto;overflow:visible}.toolbar{display:none!important}}
+label {
+    font-size: 1.3em;
+    display: block;
+    /* 2026.07.21 変更: 余白を約半分に(18px→9px, 8px→4px) */
+    margin-top: 9px;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
 
+.row-3 {
+    display: flex;
+    gap: 8px;
+    /* 2026.07.21 変更: 余白を約半分に(15px→8px) */
+    margin-bottom: 8px;
+}
+
+.row-3 > div {
+    flex: 1;
+    position: relative;
+}
+
+.row-2 {
+    display: flex;
+    gap: 8px;
+    /* 2026.07.21 変更: 余白を約半分に(15px→8px) */
+    margin-bottom: 8px;
+}
+
+.row-2 > div:nth-child(1) {
+    flex: 3;
+}
+
+.row-2 > div:nth-child(2) {
+    flex: 1;
+    position: relative;
+}
+
+/* 2026.08.17 変更:
+   TOPタイム・％設定・自分のタイムの数字を約30％拡大。
+   数字を大きくした分、入力欄の上下余白を縮小して
+   全体の上下サイズをできるだけコンパクトに維持する。 */
+input {
+    width: 100%;
+    padding: 1px 5px;      /* 7px → 3px */
+    box-sizing: border-box;
+    text-align: center;
+    border: 2px solid #888;
+    border-radius: 6px;
+    font-size: 3.50em;     /* 1.5em → 約30％拡大 */
+    font-weight: bold;
+}
+
+/* 2026.07.16 追加: 打ち込み中（フォーカス中）の欄を薄い黄色にする */
+input:focus {
+    background: #fff9c4;
+    outline: none;
+    border-color: #d4b800;
+}
+
+/* 2026.07.16 追加: 0埋め対象の入力欄を右寄せにして桁の位置を視覚的に分かりやすくする */
+.digit-guide input {
+    text-align: right;
+    padding-right: 10px;
+}
+
+.digit-guide::after {
+    content: attr(data-placeholder);
+    position: absolute;
+    right: 8px;
+    /* 2026.07.21 変更: input内padding縮小に伴いガイド文字の位置も調整(16px→10px) */
+    top: 10px;
+    color: #999;
+    pointer-events: none;
+    font-size: 0.75em;
+}
+
+/* 2026.07.16 追加: フォーカス中はガイド文字を隠す（入力の邪魔をしないため） */
+.digit-guide:focus-within::after {
+    display: none;
+}
+
+
+/* 2026.11.13 追加：タイム・％を1つの入力欄で入力する統合表示 */
+.combined-input {
+    width: 100%;
+    padding: 1px 5px;
+    box-sizing: border-box;
+    text-align: center;
+    border: 2px solid #888;
+    border-radius: 6px;
+    font-size: 3.2em;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+    font-family: inherit;
+    background: #fff;
+}
+.combined-input:focus {
+    background: #fff9c4;
+    outline: none;
+    border-color: #d4b800;
+}
+.input-hint {
+    margin: 2px 0 8px;
+    color: #777;
+    font-size: 0.85em;
+    text-align: right;
+}
+/* 2026.11.13 追加：旧入力欄は保存データ互換と既存計算ロジック維持のため内部保持 */
+.legacy-fields { display: none !important; }
+@media (max-width: 480px) {
+    .combined-input { font-size: 2.7em; }
+}
+
+/* ===== 2026.11.13 追加：スマホ用 独自キーパッド（「/」が打てない問題の対策） ===== */
+#keypad {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    background: #d1d5db;
+    padding: 6px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom));
+    z-index: 1000;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.25);
+    user-select: none;
+    -webkit-user-select: none;
+}
+#keypad.open { display: block; }
+#keypad .kp-grid {
+    max-width: 500px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+#keypad button {
+    height: 52px;
+    font-size: 1.6em;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background: #fff;
+    color: #222;
+    touch-action: manipulation;
+}
+#keypad button:active { background: #fff9c4; }
+#keypad button.kp-fn { background: #9aa3ad; color: #fff; font-size: 1.2em; }
+#keypad button.kp-slash { background: #004a99; color: #fff; }
+/* 2026.11.13 追加：「閉じる」ボタンは常に青 */
+#keypad button.kp-close { background: #004a99; color: #fff; font-size: 1.2em; }
+#keypad button.kp-wide { grid-column: span 2; }
+#keypad button:disabled { opacity: 0.35; }
+/* キーパッド表示中は、隠れないよう下に余白を確保 */
+body.kp-open { padding-bottom: 280px; }
+
+#result {
+    /* 2026.07.21 変更: 余白を約半分に(20px→10px) */
+    margin-top: 10px;
+    padding: 10px;
+    background: #004a99;
+    color: white;
+    border-radius: 8px;
+    font-size: 2em;
+    text-align: center;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+/* 2026.07.30 追加: 100％未満の時オレンジ背景 */
+#result.under-100 {
+    background: #ff9800;
+}
+
+/* 2026.07.16 追加: 入力済ボタン */
+#doneBtn {
+    display: block;
+    width: 100%;
+    /* 2026.07.21 変更: 余白を約半分に(20px→10px, 14px→7px) */
+    margin-top: 10px;
+    padding: 7px;
+    background: #888;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#doneBtn:active {
+    background: #666;
+}
+
+#onePercent {
+    /* 2026.07.21 変更: 余白を約半分に(10px→5px) */
+    margin-top: 5px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /* 2026.07.21 変更: 余白を約半分に(20px→10px) */
+    margin-top: 10px;
+}
+
+th {
+    background: #f0f0f0;
+    font-size: 1.2em;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    /* 2026.07.21 変更: 余白を約半分に(12px→6px) */
+    padding: 6px;
+    text-align: center;
+    font-size: 1.15em;
+}
+   @media (max-width: 480px) {
+    h3 {
+        font-size: 1.4em;
+    }
+}    
 </style>
 </head>
+
 <body>
-<header>
- <div class="kicker">EVENT PLANNER / TOKAI 4 PREFECTURES</div>
- <h1>名古屋近郊 展示会・イベント検討カレンダー<br>2026.11 — 2027.07</h1>
- <p>愛知・岐阜・三重・静岡｜AI・DX・IT・製造・自動車・加工・生産技術の関連イベント｜2026.11 — 2027.07</p>
- <div class="toolbar">
-  <input id="search" type="search" placeholder="イベント名・テーマ・会場で検索">
-  <select id="region"><option value="">4県すべて</option><option>愛知県</option><option>岐阜県</option><option>三重県</option><option>静岡県</option></select>
-  <select id="area"><option value="">全会場</option></select>
-  <select id="category"><option value="">全テーマ</option><option>製造・加工</option><option>自動車・モビリティ</option><option>DX・AI・IT</option><option>ロボット・自動化</option></select>
-  <button onclick="window.print()">印刷 / PDF保存</button>
-  <button onclick="clearChoices()">検討状況をリセット</button>
- </div>
-</header>
-<main class="wrap">
- <p class="note">検討状況・メモはこのブラウザー内に保存されます。開催日・内容・申込条件は公式ページで再確認してください。</p>
- <div class="legend"><span class="chip">◎ おすすめ候補</span><span class="chip">公式情報確認済み／一部は今後更新</span></div>
- <div class="planner-layout">
- <aside class="calendar-sidebar" aria-label="日付入り月間カレンダー">
-  <div class="sidebar-heading">開催カレンダー</div>
-  <p class="sidebar-sub">全日付を縮小表示。開催日は色付きです。</p>
-  <div id="calendar"></div>
- </aside>
- <section class="event-scroll" id="eventsPanel">
-  <h2 class="section-title">イベント一覧・紹介</h2>
-  <div id="events"></div>
-  <h2 class="section-title">会場メモ</h2>
-  <div class="venue-grid">
-  <div class="venue-card"><h3>ポートメッセなごや</h3><p>名古屋市港区金城ふ頭。製造業・ものづくり・IT系の大型展示会が多い会場。</p></div>
-  <div class="venue-card"><h3>吹上ホール</h3><p>名古屋市千種区吹上。地下鉄桜通線「吹上駅」から徒歩約5分。</p></div>
-  <div class="venue-card"><h3>JPタワー名古屋</h3><p>名古屋駅直結エリア。セミナー・カンファレンス型のイベントに便利。</p></div>
-  <div class="venue-card"><h3>Aichi Sky Expo</h3><p>常滑市・中部国際空港島。中部国際空港駅から徒歩約5分。</p></div>
- </div>
- </section>
+
+<h3><span class="sub-title">2026.11.13 入力をカンタンに　nakaZ　Ver.5.3</span><br>「良く見える！モトジムTOP比」</h3>
+    
+
+<!-- 2026.11.13 変更：3つの入力欄とも inputmode="numeric" → "none"（標準キーボードを出さず、下の独自キーパッドで入力） -->
+<!-- 2026.11.13 変更：分・秒・ミリ秒を1つの入力欄に統合 -->
+<label for="topTimeInput">TOPタイム</label>
+<input class="combined-input" type="text" inputmode="none" autocomplete="off"
+       id="topTimeInput" placeholder="00/00/000" aria-label="TOPタイム 分 秒 ミリ秒">
+<div class="input-hint" id="topTimeInterpretation">入力例：1/20/333 → 1分20秒333</div>
+
+<!-- 2026.11.13 変更：％の整数・小数を1つの入力欄に統合 -->
+<label for="basePercentInput">TOPタイムの％設定</label>
+<input class="combined-input" type="text" inputmode="none" autocomplete="off"
+       id="basePercentInput" placeholder="100.00" aria-label="TOPタイムの％設定">
+<!-- 2026.11.13 変更：％も「/」で区切って入力（100/01 → 100.01％） -->
+<div class="input-hint">例：100/01 → 100.01％　・　100/1 → 100.10％</div>
+
+<!-- 2026.11.13 変更：自分の分・秒・ミリ秒を1つの入力欄に統合 -->
+<label for="myTimeInput">自分のタイム</label>
+<input class="combined-input" type="text" inputmode="none" autocomplete="off"
+       id="myTimeInput" placeholder="00/00/000" aria-label="自分のタイム 分 秒 ミリ秒">
+<div class="input-hint" id="myTimeInterpretation">入力例：1/20/333 → 1分20秒333</div>
+
+<!-- 2026.11.13 追加：既存localStorageキーと計算ロジックを維持する内部用の旧入力欄 -->
+<div class="legacy-fields" aria-hidden="true">
+  <input id="topM"><input id="topS"><input id="topMs">
+  <input id="baseP_int"><input id="baseP_dec">
+  <input id="myM"><input id="myS"><input id="myMs">
 </div>
-</main>
-<footer><strong>調査メモ</strong><br>対象期間：2026年11月〜2027年7月。対象地域：愛知・岐阜・三重・静岡。開催が確認できた関連イベントを掲載しています。対象期間内に4県で該当イベントが見つからない月もあります。日程・会場・申込状況は変更される場合があるため、参加前に公式情報をご確認ください。</footer>
+
+<!-- 2026.11.13 廃止：「全て入力済」ボタンを削除（キーパッドの「閉じる」で代用） -->
+
+<div id="result">あなたの％: ---</div>
+<div id="onePercent"></div>
+
+<table>
+    <thead>
+        <tr>
+            <th>％基準</th>
+            <th>タイム目安</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+
+<!-- 2026.11.13 追加：スマホ用 独自キーパッド（数字・「/」・⌫・次へ・閉じる） -->
+<div id="keypad" aria-label="入力キーパッド">
+  <div class="kp-grid">
+    <button type="button" data-key="7">7</button>
+    <button type="button" data-key="8">8</button>
+    <button type="button" data-key="9">9</button>
+    <button type="button" data-key="back" class="kp-fn">⌫</button>
+
+    <button type="button" data-key="4">4</button>
+    <button type="button" data-key="5">5</button>
+    <button type="button" data-key="6">6</button>
+    <button type="button" data-key="/" id="kpSlash" class="kp-slash">/</button>
+
+    <button type="button" data-key="1">1</button>
+    <button type="button" data-key="2">2</button>
+    <button type="button" data-key="3">3</button>
+    <button type="button" data-key="next" class="kp-fn">次へ</button>
+
+    <button type="button" data-key="0">0</button>
+    <button type="button" data-key="00">00</button>
+    <button type="button" data-key="close" class="kp-close kp-wide">閉じる</button>
+  </div>
+</div>
+
 <script>
-const events = [
-  {
-    "date": "2026-11-11",
-    "end": "2026-11-13",
-    "area": "愛知県",
-    "name": "メッセナゴヤ2026",
-    "venue": "ポートメッセなごや",
-    "cat": "製造・加工",
-    "tags": [
-      "製造業",
-      "技術・サービス",
-      "企業交流"
-    ],
-    "desc": "幅広い企業・技術が集まる異業種交流展示会。製造業の技術・製品・サービスや新たな取引先を探せる。",
-    "fit": "製造技術・業務改善につながる出展を絞って見学。",
-    "url": "https://www.messenagoya.jp/",
-    "img": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
-    "priority": false
-  },
-  {
-    "date": "2026-11-12",
-    "end": "2026-11-14",
-    "area": "岐阜県",
-    "name": "関の工場参観日2026",
-    "venue": "せきてらす・関市内参加工場",
-    "cat": "製造・加工",
-    "tags": [
-      "工場見学",
-      "金属加工",
-      "刃物・精密製造"
-    ],
-    "desc": "関市内の工場を見学し、職人技や精密な製造工程に触れる産業観光イベント。",
-    "fit": "現場の加工工程・技能・ものづくりの工夫を知る機会。",
-    "url": "https://www.kankou-gifu.jp/event/detail_9719.html",
-    "img": "https://images.unsplash.com/photo-1567789884554-0b844b597180?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2026-11-19",
-    "end": "2026-11-20",
-    "area": "愛知県",
-    "name": "TECH Biz EXPO 2026",
-    "venue": "ポートメッセなごや 第1展示館",
-    "cat": "製造・加工",
-    "tags": [
-      "次世代ものづくり",
-      "加工技術",
-      "特殊素材",
-      "高精度部品"
-    ],
-    "desc": "独自加工・特殊素材・高精度部品など、中小製造業の高度な基盤技術を発信する展示会。AI・ロボティクス・新素材分野も対象。",
-    "fit": "試作・加工・部品製造の新技術や協力会社候補を探す。",
-    "url": "https://www.techbizexpo.com/",
-    "img": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2026-11-25",
-    "end": "2026-11-25",
-    "area": "三重県",
-    "name": "みえ・あいち・ぎふ「次世代産業参入展示商談会 in 安永」",
-    "venue": "株式会社安永 本社",
-    "cat": "製造・加工",
-    "tags": [
-      "新技術",
-      "新工法",
-      "エンジン部品",
-      "機械装置"
-    ],
-    "desc": "東海三県の中小企業が、エンジン部品・機械装置・環境機器分野の安永に新技術や新工法を提案する展示商談会。",
-    "fit": "自動車部品・加工技術・新規取引先の観点で注目。",
-    "url": "https://www.miesc.or.jp/support/contents/1572/",
-    "img": "https://images.unsplash.com/photo-1581092335878-2d9ff86ca2bf?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2026-11-25",
-    "end": "2026-11-27",
-    "area": "愛知県",
-    "name": "オートモーティブ ワールド 名古屋（自動車部品＆加工・SDV等）",
-    "venue": "Aichi Sky Expo",
-    "cat": "自動車・モビリティ",
-    "tags": [
-      "自動車部品",
-      "加工",
-      "車載ソフトウェア",
-      "電動化"
-    ],
-    "desc": "クルマの先端技術展。自動車部品＆加工EXPO、SDV EXPO、カーエレクトロニクス、サステナブル技術などを同時開催。",
-    "fit": "自動車部品メーカーの材料・加工・車載電子・ソフトウェア動向を確認。",
-    "url": "https://www.automotiveworld.jp/nagoya/ja-jp.html",
-    "img": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2026-11-25",
-    "end": "2026-11-27",
-    "area": "愛知県",
-    "name": "ネプコン ジャパン 名古屋",
-    "venue": "Aichi Sky Expo",
-    "cat": "製造・加工",
-    "tags": [
-      "電子部品",
-      "実装",
-      "半導体・基板",
-      "検査装置"
-    ],
-    "desc": "エレクトロニクス開発・実装に関する専門展。電子部品、基板、実装、製造装置などを紹介。",
-    "fit": "車載電子部品・制御基板など周辺技術の確認に。",
-    "url": "https://www.nepconjapan.jp/nagoya/ja-jp.html",
-    "img": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
-    "priority": false
-  },
-  {
-    "date": "2026-11-25",
-    "end": "2026-11-27",
-    "area": "愛知県",
-    "name": "ファクトリーイノベーション Week 名古屋",
-    "venue": "Aichi Sky Expo",
-    "cat": "ロボット・自動化",
-    "tags": [
-      "スマート工場",
-      "AI・DX",
-      "ロボット",
-      "自動化"
-    ],
-    "desc": "スマート工場EXPO、ロボデックス、製造業カーボンニュートラル展、人手不足対策EXPO、工場安全・環境改善EXPOの複合展。",
-    "fit": "工場DX、設備データ活用、予兆保全、AGV/AMR、自動化の情報収集に。",
-    "url": "https://www.fiweek.jp/nagoya/ja-jp/about.html",
-    "img": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2026-11-26",
-    "end": "2026-11-26",
-    "area": "三重県",
-    "name": "航空機業界の現状と中小企業の参入促進講座",
-    "venue": "三重県産業支援センター（ハイブリッド）",
-    "cat": "製造・加工",
-    "tags": [
-      "航空宇宙",
-      "部品製造",
-      "新規参入",
-      "技術動向"
-    ],
-    "desc": "航空機業界の現状と中小企業の参入余地を学ぶ、三重県の航空宇宙産業参入促進講座。",
-    "fit": "自動車部品で培った加工・品質・生産技術の他産業展開を考える材料に。",
-    "url": "https://www.pref.mie.lg.jp/TOPICS/m0031300584.htm",
-    "img": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80",
-    "priority": false
-  },
-  {
-    "date": "2026-12-03",
-    "end": "2026-12-03",
-    "area": "岐阜県",
-    "name": "岐阜・滋賀・三重「モノづくり商談会 in GIFU」",
-    "venue": "大垣フォーラムホテル",
-    "cat": "製造・加工",
-    "tags": [
-      "製造業",
-      "受発注",
-      "個別商談",
-      "企業間連携"
-    ],
-    "desc": "岐阜・滋賀・三重の製造業中小企業と発注企業が、対面で個別商談・情報交換を行う商談会。",
-    "fit": "東海地域の協力会社・発注先・加工ネットワークを探す機会。",
-    "url": "https://www.miesc.or.jp/support/contents/1578/",
-    "img": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80",
-    "priority": false
-  },
-  {
-    "date": "2026-12-04",
-    "end": "2026-12-04",
-    "area": "静岡県",
-    "name": "アルミ部品の品質・溶解・鋳造基礎セミナー",
-    "venue": "静岡県工業技術研究所（静岡市）",
-    "cat": "製造・加工",
-    "tags": [
-      "アルミ部品",
-      "鋳造",
-      "品質",
-      "材料"
-    ],
-    "desc": "高品質なアルミ鋳造部品製造の基礎知識を学ぶ、静岡県工業技術研究所の技術セミナー。",
-    "fit": "アルミ部品の製造品質・材料・鋳造技術に関係。",
-    "url": "https://www.iri.pref.shizuoka.jp/seminar/event/119739/",
-    "img": "https://images.unsplash.com/photo-1567789884554-0b844b597180?auto=format&fit=crop&w=900&q=80",
-    "priority": false
-  },
-  {
-    "date": "2026-12-07",
-    "end": "2026-12-08",
-    "area": "愛知県",
-    "name": "RICOH Value Presentation 2026 名古屋",
-    "venue": "吹上ホール",
-    "cat": "DX・AI・IT",
-    "tags": [
-      "AI",
-      "DX・GX",
-      "業務変革",
-      "製造業DX"
-    ],
-    "desc": "AI活用、DX・GX、業務変革、製造業のモノづくりDXなどをテーマにした展示・セミナー。",
-    "fit": "生成AI・社内業務改善・製造現場DXの事例を探す候補。",
-    "url": "https://vpre.ricoh.co.jp/nagoya/lp/",
-    "img": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2026-12-10",
-    "end": "2026-12-10",
-    "area": "静岡県",
-    "name": "プレス成形シミュレーションセミナー",
-    "venue": "浜松工業技術支援センター",
-    "cat": "製造・加工",
-    "tags": [
-      "プレス成形",
-      "CAE",
-      "シミュレーション",
-      "材料特性"
-    ],
-    "desc": "材料特性の講演、プレス成形シミュレーション体験、支援センターの取組紹介・見学を実施。",
-    "fit": "プレス加工・金型・成形解析・試作検討に直結。",
-    "url": "https://www.iri.pref.shizuoka.jp/seminar/event/117860/",
-    "img": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2026-12-11",
-    "end": "2026-12-11",
-    "area": "岐阜県",
-    "name": "各務原ものづくりDXミニ展示会2026",
-    "venue": "各務原市産業文化センター",
-    "cat": "DX・AI・IT",
-    "tags": [
-      "工場DX",
-      "AI活用",
-      "生産計画",
-      "在庫・検査"
-    ],
-    "desc": "生産計画・在庫・検査・見積・日報など工場業務を支援するサービス企業11社とAI活用セミナーが集まる展示会。",
-    "fit": "Excel業務改善・社内Webアプリ・製造現場のDXに近いテーマ。",
-    "url": "https://www.city.kakamigahara.lg.jp/shisei/shisaku/sangyo/1008446/1022027/1028594.html",
-    "img": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2026-12-15",
-    "end": "2026-12-15",
-    "area": "三重県",
-    "name": "航空宇宙産業参入講座：品質規格で勝つ戦略",
-    "venue": "三重県産業支援センター（ハイブリッド）",
-    "cat": "製造・加工",
-    "tags": [
-      "航空宇宙",
-      "品質規格",
-      "品質保証",
-      "新規参入"
-    ],
-    "desc": "航空宇宙分野への参入に必要な品質規格・認証の考え方を扱う三重県の講座。",
-    "fit": "自動車部品の品質管理・工程管理を他産業へ展開する視点に。",
-    "url": "https://www.pref.mie.lg.jp/TOPICS/m0031300584.htm",
-    "img": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
-    "priority": false
-  },
-  {
-    "date": "2026-12-17",
-    "end": "2026-12-17",
-    "area": "静岡県",
-    "name": "硬さ試験・金属部品の品質計測セミナー",
-    "venue": "浜松工業技術支援センター",
-    "cat": "製造・加工",
-    "tags": [
-      "硬さ試験",
-      "品質保証",
-      "計測",
-      "金属部品"
-    ],
-    "desc": "薄膜から金属部品までを対象に、硬さ試験機の機能・活用法と機器見学を行う技術セミナー。",
-    "fit": "品質管理・検査・測定の知識や設備活用の参考に。",
-    "url": "https://www.iri.pref.shizuoka.jp/seminar/event/118597/",
-    "img": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
-    "priority": false
-  },
-  {
-    "date": "2027-01-07",
-    "end": "2027-01-07",
-    "area": "静岡県",
-    "name": "家電・自動車プラスチックリサイクル技術講習会",
-    "venue": "静岡県工業技術研究所（静岡市）",
-    "cat": "自動車・モビリティ",
-    "tags": [
-      "自動車樹脂",
-      "材料",
-      "リサイクル",
-      "生産技術"
-    ],
-    "desc": "家電・自動車に使われるプラスチックのリサイクル課題、技術動向、材料・ものづくりの今後を扱う講習会。",
-    "fit": "自動車部品の樹脂材料・軽量化・資源循環の情報収集に。",
-    "url": "https://www.iri.pref.shizuoka.jp/seminar/event/121069/",
-    "img": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2027-01-29",
-    "end": "2027-01-30",
-    "area": "静岡県",
-    "name": "ものづくり力交流フェア2027",
-    "venue": "富士市産業交流展示場 ふじさんめっせ",
-    "cat": "製造・加工",
-    "tags": [
-      "ものづくり企業",
-      "技術・製品",
-      "企業間交流",
-      "デジタル展示"
-    ],
-    "desc": "富士市のものづくり企業が技術・製品を発信する産業交流展示会。デジタル展示会やビジネスマッチングも予定。",
-    "fit": "地域の製造企業・加工技術・協業先を探すのに有用。",
-    "url": "https://www.city.fuji.shizuoka.jp/shigoto/sangyoshinko/fair/index.html",
-    "img": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2027-01-29",
-    "end": "2027-01-29",
-    "area": "三重県",
-    "name": "航空宇宙産業参入講座：中小企業の宇宙市場開拓",
-    "venue": "三重県産業支援センター（ハイブリッド）",
-    "cat": "製造・加工",
-    "tags": [
-      "航空宇宙",
-      "精密加工",
-      "新規市場",
-      "技術提案"
-    ],
-    "desc": "中小企業による宇宙市場開拓の戦略を学ぶ、三重県の航空宇宙産業参入促進講座。",
-    "fit": "精密部品・加工技術・品質保証の新たな市場を知る機会。",
-    "url": "https://www.pref.mie.lg.jp/TOPICS/m0031300584.htm",
-    "img": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=900&q=80",
-    "priority": false
-  },
-  {
-    "date": "2027-02-17",
-    "end": "2027-02-19",
-    "area": "愛知県",
-    "name": "高機能素材 Week 名古屋／マテリアルDX展",
-    "venue": "ポートメッセなごや",
-    "cat": "製造・加工",
-    "tags": [
-      "先端材料",
-      "素材DX",
-      "材料開発",
-      "リサイクル"
-    ],
-    "desc": "高機能素材・サステナブル材料・材料開発・評価・加工に加え、材料業界向けAI・DXソリューションを扱う複合展示会。",
-    "fit": "自動車部品の材料・軽量化・材料データ活用に。",
-    "url": "https://www.material-expo.jp/nagoya/ja-jp.html",
-    "img": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2027-02-25",
-    "end": "2027-02-26",
-    "area": "愛知県",
-    "name": "自動認識総合展 名古屋 2027",
-    "venue": "吹上ホール",
-    "cat": "DX・AI・IT",
-    "tags": [
-      "RFID",
-      "バーコード",
-      "画像認識",
-      "トレーサビリティ"
-    ],
-    "desc": "RFID、ICタグ、バーコード、QR、画像認識などの自動認識技術を紹介。",
-    "fit": "部品管理・製造履歴・工程トレーサビリティの改善に。",
-    "url": "https://www.autoid-expo.com/nagoya/jp/visit/",
-    "img": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2027-02-26",
-    "end": "2027-02-26",
-    "area": "愛知県",
-    "name": "DXシステム開発 Expo／ものづくりDX Expo／AI Innovation Expo",
-    "venue": "JPタワー名古屋 ホール&カンファレンス",
-    "cat": "DX・AI・IT",
-    "tags": [
-      "AIエージェント",
-      "システム開発",
-      "製造DX",
-      "内製化"
-    ],
-    "desc": "システム開発の内製化、AIエージェント、製造現場のDX、データAI活用を扱う3展同時開催イベント。",
-    "fit": "社内Webアプリ開発・生成AI・業務システムの実務活用に近い。",
-    "url": "https://f2ff.jp/event/dx-ai",
-    "img": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2027-03-24",
-    "end": "2027-03-25",
-    "area": "愛知県",
-    "name": "Security Days Spring 2027 名古屋",
-    "venue": "ウインクあいち",
-    "cat": "DX・AI・IT",
-    "tags": [
-      "サイバーセキュリティ",
-      "情報システム",
-      "クラウド"
-    ],
-    "desc": "企業の情報システム・クラウド利用を支えるセキュリティ関連カンファレンス・展示。",
-    "fit": "社内Webシステムやクラウド導入時のセキュリティ知識に。",
-    "url": "https://www.securitydays.jp/",
-    "img": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=900&q=80",
-    "priority": false
-  },
-  {
-    "date": "2027-04-07",
-    "end": "2027-04-09",
-    "area": "愛知県",
-    "name": "ものづくり ワールド 名古屋 2027",
-    "venue": "ポートメッセなごや",
-    "cat": "製造・加工",
-    "tags": [
-      "設計・製造DX",
-      "機械要素",
-      "3Dプリンタ",
-      "計測・検査",
-      "フィジカルAI"
-    ],
-    "desc": "設計・製造ソリューション、機械要素、工場設備、3Dプリンタ、計測・検査、製造業DX、フィジカルAIなどの専門展が集結。",
-    "fit": "工程設計・試作・設備・品質・データ活用まで幅広く情報収集。",
-    "url": "https://www.manufacturing-world.jp/nagoya/ja-jp/about.html",
-    "img": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2027-05-18",
-    "end": "2027-05-21",
-    "area": "愛知県",
-    "name": "DXPO 名古屋 ’27（製造テック・業務改革AI等）",
-    "venue": "ポートメッセなごや",
-    "cat": "DX・AI・IT",
-    "tags": [
-      "製造テックDX",
-      "業務改革AI",
-      "IT・情シス",
-      "業務効率化"
-    ],
-    "desc": "製造テックDXPOを含む、業務別DX製品・サービスの展示会。開催日程はテーマごとに分かれる。",
-    "fit": "社内業務のシステム化・Excel業務改善・AI活用の参考に。",
-    "url": "https://dxpo.jp/real/fox/nagoya/",
-    "img": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2027-06-02",
-    "end": "2027-06-04",
-    "area": "愛知県",
-    "name": "AXIA EXPO 2027",
-    "venue": "Aichi Sky Expo",
-    "cat": "製造・加工",
-    "tags": [
-      "水素・アンモニア",
-      "再生可能エネルギー",
-      "脱炭素",
-      "工場エネルギー"
-    ],
-    "desc": "水素・アンモニア、再生可能エネルギー、CO2回収・利用など、脱炭素・エネルギー技術の展示会。",
-    "fit": "製造業のエネルギー・環境対応の情報収集に。",
-    "url": "https://axia-expo.nikkan.co.jp/",
-    "img": "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=900&q=80",
-    "priority": false
-  },
-  {
-    "date": "2027-07-21",
-    "end": "2027-07-23",
-    "area": "愛知県",
-    "name": "Japan IT Week／Japan DX & AX Week 名古屋",
-    "venue": "ポートメッセなごや",
-    "cat": "DX・AI・IT",
-    "tags": [
-      "IT・システム",
-      "AI・AX",
-      "DX",
-      "セキュリティ"
-    ],
-    "desc": "IT・システム、AI、業務自動化、DX関連の製品・サービスを比較する総合展示会。",
-    "fit": "社内システム・DX推進・AI導入の選択肢を広く見る目的に。",
-    "url": "https://www.japan-it.jp/nagoya/ja-jp.html",
-    "img": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  },
-  {
-    "date": "2027-07-21",
-    "end": "2027-07-23",
-    "area": "愛知県",
-    "name": "人とモビリティのテクノロジー展 2027 NAGOYA",
-    "venue": "Aichi Sky Expo",
-    "cat": "自動車・モビリティ",
-    "tags": [
-      "自動車技術",
-      "部品・車体",
-      "生産技術",
-      "品質管理"
-    ],
-    "desc": "自動車・部品メーカーの設計、研究、開発、生産技術、品質管理、購買部門などを対象とする技術展。",
-    "fit": "自動車部品メーカーの業務に直結する専門展示会。",
-    "url": "https://aee.expo-info.jsae.or.jp/ja/nagoya/",
-    "img": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80",
-    "priority": true
-  }
-];
-const fmt=d=>{const [y,m,day]=d.split("-");return `${y}/${Number(m)}/${Number(day)}`};
-const sameMonth=d=>d.slice(0,7);
-const months=[]; for(let y=2026,m=11; y<2027 || (y===2027 && m<=7); ){months.push(`${y}-${String(m).padStart(2,"0")}`);m++;if(m===13){m=1;y++;}}
-const monthLabel=m=>{const [y,mo]=m.split("-");return `${y}年${Number(mo)}月`};
-const stateKey=e=>"event-choice-"+e.name;
-function drawCalendar(){
- const root=document.getElementById("calendar"); root.innerHTML="";
- months.forEach(m=>{
-  const wrap=document.createElement("div");
-  wrap.innerHTML=`<div class="month"><h2>${monthLabel(m)}</h2></div>`;
-  const grid=document.createElement("div");grid.className="calendar";
-  ["日","月","火","水","木","金","土"].forEach(x=>{
-   const d=document.createElement("div");d.className="calhead";d.textContent=x;grid.appendChild(d)
-  });
-  const [y,mo]=m.split("-").map(Number), first=new Date(y,mo-1,1).getDay(), last=new Date(y,mo,0).getDate();
-  for(let i=0;i<first;i++){
-   const d=document.createElement("div");d.className="calcell empty";grid.appendChild(d)
-  }
-  for(let n=1;n<=last;n++){
-   const date=`${y}-${String(mo).padStart(2,"0")}-${String(n).padStart(2,"0")}`;
-   const hits=events.filter(e=>date>=e.date&&date<=e.end);
-   const d=document.createElement("div");d.className="calcell"+(hits.length?" has":"");
-   d.innerHTML=`<strong>${n}</strong>${hits.length?`<small>●</small>`:""}`;
-   if(hits.length){
-    d.title=hits.map(x=>x.name).join(" / ");
-    d.setAttribute("role","button");d.tabIndex=0;
-    const jump=()=>{
-     const firstEvent=events.findIndex(e=>date>=e.date&&date<=e.end);
-     if(firstEvent<0)return;
-     // Clear filters so the selected event is always rendered before scrolling.
-     document.getElementById("search").value="";
-     document.getElementById("region").value="";
-     document.getElementById("area").value="";
-     document.getElementById("category").value="";
-     refreshVenueOptions(); drawEvents();
-     requestAnimationFrame(()=>{
-      const target=document.getElementById("event-"+firstEvent);
-      const panel=document.getElementById("eventsPanel");
-      if(!target||!panel)return;
-      const top=target.getBoundingClientRect().top-panel.getBoundingClientRect().top+panel.scrollTop-8;
-      panel.scrollTo({top,behavior:"smooth"});
-      target.classList.add("jump-highlight");
-      setTimeout(()=>target.classList.remove("jump-highlight"),1800);
-     });
-    };
-    d.addEventListener("click",jump);
-    d.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();jump()}});
-   }
-   grid.appendChild(d)
-  }
-  wrap.appendChild(grid);root.appendChild(wrap);
- });
+
+/* 2026.07.16 追加: 全角数字（０-９）が入力された場合、自動的に半角数字へ変換する
+   （数値専用アプリのため、全角モードで打ってしまっても実害が出ないようにする） */
+function toHalfWidth(str){
+
+    return str.replace(/[０-９]/g, s=>
+        String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
+    );
 }
-function drawEvents(){
- const root=document.getElementById("events");root.innerHTML="";
- const q=document.getElementById("search").value.toLowerCase(), area=document.getElementById("area").value, cat=document.getElementById("category").value, region=document.getElementById("region").value;
- let shown=0;
- events.forEach((e,i)=>{
-  const hay=[e.name,e.area,e.venue,e.cat,e.desc,...e.tags].join(" ").toLowerCase();
-  if((q&&!hay.includes(q))||(area&&!e.venue.includes(area))||(cat&&e.cat!==cat)||(region&&e.area!==region))return;
-  shown++;
-  const section=sameMonth(e.date);
-  if(!root.querySelector(`[data-month="${section}"]`)){const h=document.createElement("div");h.className="month";h.dataset.month=section;h.innerHTML=`<h2>${monthLabel(section)}</h2>`;root.appendChild(h)}
-  const card=document.createElement("article");card.className="event";card.id="event-"+i;
-  const status=localStorage.getItem(stateKey(e))||"未検討", memo=localStorage.getItem(stateKey(e)+"-memo")||"";
-  card.innerHTML=`<div class="visual"><img src="${e.img}" alt="${e.alt}" loading="lazy" onerror="this.style.display='none'"><span>${e.venue}</span></div>
-  <div class="content"><div class="topline"><span class="date">${fmt(e.date)}${e.end!==e.date?" 〜 "+fmt(e.end):""}</span><span class="venue">${e.area}・${e.venue}</span>${e.priority?'<span class="priority">おすすめ候補</span>':""}</div>
-  <h3>${e.name}</h3><div class="tags">${e.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
-  <p>${e.desc}</p><p><strong>見学の視点：</strong>${e.fit}</p>
-  <div class="actions"><a class="official" href="${e.url}" target="_blank" rel="noopener">公式ページを見る ↗</a>
-  <label>検討状況 <select class="status" data-i="${i}"><option ${status==="未検討"?"selected":""}>未検討</option><option ${status==="候補"?"selected":""}>候補</option><option ${status==="行きたい"?"selected":""}>行きたい</option><option ${status==="保留"?"selected":""}>保留</option><option ${status==="見送り"?"selected":""}>見送り</option></select></label>
-  <input class="memo" data-i="${i}" placeholder="メモ（参加者・目的など）" value="${memo.replaceAll('"','&quot;')}"></div></div>`;
-  root.appendChild(card);
- });
- if(!shown)root.innerHTML='<p>条件に一致するイベントはありません。</p>';
- root.querySelectorAll(".status").forEach(el=>el.addEventListener("change",()=>localStorage.setItem(stateKey(events[el.dataset.i]),el.value)));
- root.querySelectorAll(".memo").forEach(el=>el.addEventListener("change",()=>localStorage.setItem(stateKey(events[el.dataset.i])+"-memo",el.value)));
+
+/* 2026.07.16 追加: マイナス入力を禁止し、入れようとした場合は "00" にリセットする
+   "-"が値のどこかに含まれる場合（例: 7-333 のような不正な形も含む）はすべて対象 */
+function guardNegative(el){
+
+    if(el.value !== '' && (el.value.includes('-') || Number(el.value) < 0)){
+        el.value = '00';
+    }
 }
-function clearChoices(){if(!confirm("このブラウザーに保存した検討状況・メモをすべて消しますか？"))return;events.forEach(e=>{localStorage.removeItem(stateKey(e));localStorage.removeItem(stateKey(e)+"-memo")});drawEvents()}
-const areaSelect=document.getElementById("area");
-function refreshVenueOptions(){const keep=areaSelect.value;const region=document.getElementById("region").value;const venues=[...new Set(events.filter(e=>!region||e.area===region).map(e=>e.venue))].sort();areaSelect.innerHTML='<option value="">全会場</option>'+venues.map(v=>`<option>${v}</option>`).join("");if(venues.includes(keep))areaSelect.value=keep;}
-document.getElementById("region").addEventListener("change",()=>{refreshVenueOptions();drawEvents()});
-["search","area","category"].forEach(id=>document.getElementById(id).addEventListener(id==="search"?"input":"change",drawEvents));
-refreshVenueOptions();drawCalendar();drawEvents();
+
+/* 2026.07.16 追加: マイナス禁止ガード付きで値を保存・再計算する（分・整数欄用） */
+function guardAndSave(el){
+
+    guardNegative(el);
+    saveAndCalc();
+}
+
+/* 2026.07.16 追加: ％（baseP_int + baseP_dec）が100.0未満にならないようにする
+   100未満になった場合は100.0％にリセットする */
+function checkPercentMin(){
+
+    const intEl=document.getElementById('baseP_int');
+    const decEl=document.getElementById('baseP_dec');
+
+    const val=parseFloat(
+        (intEl.value||0) + "." + (decEl.value||0)
+    );
+
+    if(val < 100){
+        intEl.value='100';
+        decEl.value='00';
+        saveAndCalc();
+    }
+}
+
+/* 2026.07.16 追加: 分欄は1桁縛り。2桁目以降を入力しようとした場合は
+   切り詰めではなく "0" にリセットする（欄を指定したら中身の数字は0にする）
+   ※ フォーカス時のクリアは各inputのonfocus="this.value=''"で対応 */
+function limitMinute(el){
+
+    el.value = toHalfWidth(el.value);
+    guardNegative(el);
+
+    if(el.value.length > 1){
+        el.value = '0';
+    }
+
+    saveAndCalc();
+}
+
+function limit(el,max){
+
+    el.value = toHalfWidth(el.value);
+    guardNegative(el);
+
+    if(el.value.length > max){
+        el.value = el.value.slice(0,max);
+    }
+
+    // 秒は59まで
+    if(
+        (el.id === 'topS' || el.id === 'myS') &&
+        Number(el.value) > 59
+    ){
+        el.value = 59;
+    }
+
+    // ミリ秒は999まで
+    if(
+        (el.id === 'topMs' || el.id === 'myMs') &&
+        Number(el.value) > 999
+    ){
+        el.value = 999;
+    }
+
+    saveAndCalc();
+}
+
+/* 2026.07.16 追加: フォーカスが外れた時点で桁数固定の0埋め表示に確定する
+   例）2桁欄に "2" だけ入力→blur → "02" と表示され、20ではなく2として
+   確定したことが見た目で分かるようになる
+   ※ ％欄（baseP_int / baseP_dec）専用。未入力の場合は何もしない（空のまま） */
+function padOnBlur(el, length){
+
+    if(el.value !== ''){
+        el.value = el.value.padStart(length, '0');
+        saveAndCalc();
+    }
+}
+
+/* 2026.07.21 追加: ％欄以外（TOPタイム・自分のタイムの分/秒/ミリ秒）専用の0埋め処理。
+   カーソルが離れた時点で未入力の場合は桁数分の"0"（3桁なら"000"）を自動入力する。
+   値が入っている場合は従来通り桁数分のpaddingのみ行う */
+function padOnBlurZero(el, length){
+
+    if(el.value !== ''){
+        el.value = el.value.padStart(length, '0');
+    }else{
+        el.value = '0'.padStart(length, '0');
+    }
+
+    saveAndCalc();
+}
+
+/* 2026.07.16 追加: 「入力済」ボタン用。フォーカスを外してキーボードを閉じ、
+   最新の値で保存・再計算する（最後の欄にEnter移動先が無い代わりの操作） */
+function finishInput(){
+
+    if(document.activeElement && document.activeElement.tagName==='INPUT'){
+        document.activeElement.blur();
+    }
+
+    saveAndCalc();
+}
+
+/* 2026.11.13 変更：従来の保存キーをそのまま利用し、既存データとの互換性を維持 */
+function saveAndCalc(){
+    if(document.getElementById('topTimeInput')) syncCombinedToLegacy();
+    const ids=['topM','topS','topMs','baseP_int','baseP_dec','myM','myS','myMs'];
+    ids.forEach(id=>localStorage.setItem(id,document.getElementById(id).value));
+    calculate();
+}
+
+/* 2026.11.13 変更：Enterキーで統合入力欄の次へ移動 */
+const fieldOrder=['topTimeInput','basePercentInput','myTimeInput'];
+
+function focusNext(currentId){
+    const idx=fieldOrder.indexOf(currentId);
+    const nextId=fieldOrder[idx+1];
+    if(nextId) document.getElementById(nextId).focus();
+    else document.getElementById(currentId).blur();
+}
+
+/* 2026.11.13 追加：統合入力欄の整形・旧保存データ変換
+   既存の topM 等のlocalStorageキーは変更せず、従来の計算関数 calculate() を利用する。 */
+function digitsOnly(value){
+    return toHalfWidth(String(value || '')).replace(/[^0-9]/g,'');
+}
+
+/* 2026.11.13 修正：タイムは「/」をユーザーが入力。各区分の桁数を制限する */
+function formatTimeDigits(raw){
+    const parts=toHalfWidth(String(raw || '')).replace(/[^0-9/]/g,'').split('/').slice(0,3);
+    if(parts.length>0) parts[0]=parts[0].slice(0,3); // 分
+    if(parts.length>1) parts[1]=parts[1].slice(0,2); // 秒
+    // 2026.11.13 追加：秒は59まで。60以上になる2桁目は入力できない（例：1/80 → 1/8）
+    if(parts.length>1 && parts[1].length===2 && Number(parts[1])>59) parts[1]=parts[1].slice(0,1);
+    if(parts.length>2) parts[2]=parts[2].slice(0,3); // ミリ秒：最大3桁
+    return parts.join('/');
+}
+
+/* 2026.11.13 修正：％は整数3桁入力後、4桁目から小数点「.」を表示する */
+/* 2026.11.13 変更：「/」（または「.」）を区切りとして入力可能にし、100/00 → 100.00 と表示する。
+   区切りを打たない場合は、従来どおり4桁目から自動で「.」を入れる。 */
+function formatPercentDigits(raw){
+    const s=toHalfWidth(String(raw || '')).replace(/[^0-9/.]/g,'');
+    const m=s.search(/[/.]/);
+    if(m>=0){
+        const intPart=s.slice(0,m).replace(/[^0-9]/g,'').slice(0,3);
+        const decPart=s.slice(m+1).replace(/[^0-9]/g,'').slice(0,2);
+        return intPart+'.'+decPart;
+    }
+    const d=s.slice(0,5);
+    return d.length>3 ? d.slice(0,3)+'.'+d.slice(3,5) : d;
+}
+
+/* 2026.11.13 修正：入力中は「/」、入力欄から離れた後は「分・秒」表記に切り替える */
+function timeInputToJapanese(raw){
+    const parts=String(raw || '').split('/');
+    if(parts.length!==3 || parts.some(part=>part==='')) return raw;
+    const minute=Number(parts[0]);
+    const second=Number(parts[1]);
+    const milliText=String(parts[2]).padEnd(3,'0');
+    const milli=Number(milliText);
+    if(!Number.isFinite(minute) || !Number.isFinite(second) || !Number.isFinite(milli) || second>59) return raw;
+    return `${minute}分${String(second).padStart(2,'0')}秒${String(milli).padStart(3,'0')}`;
+}
+
+function japaneseToTimeInput(raw){
+    const match=String(raw || '').match(/^(\\d+)分(\\d+)秒(\\d{1,3})$/);
+    if(!match) return raw;
+    return `${match[1]}/${match[2]}/${match[3]}`;
+}
+
+/* 2026.11.13 修正：入力欄以外のタイム表示は「分・秒・ミリ秒」表記。入力時のみ「/」を使用 */
+function updateTimeInterpretation(inputId, outputId){
+    const raw=document.getElementById(inputId).value;
+    const parts=raw.split('/');
+    const output=document.getElementById(outputId);
+    if(parts.length!==3 || parts.some(part=>part==='')){
+        output.textContent='解釈：分・秒・ミリ秒を「/」で入力';
+        return;
+    }
+    const minute=Number(parts[0]);
+    const second=Number(parts[1]);
+    const milli=Number(parts[2].padEnd(3,'0'));
+    if(second>59){
+        output.textContent='解釈：秒は59以下で入力してください';
+        return;
+    }
+    output.textContent=`${minute}分${String(second).padStart(2,'0')}秒${String(milli).padStart(3,'0')}`;
+}
+
+function setLegacyTime(prefix, formatted){
+    // 「分/秒/ミリ秒」の3区分を、区分ごとに数値として読み取る
+    const parts=String(formatted || '').split('/');
+    const minute=digitsOnly(parts[0] || '').slice(0,3);
+    const second=digitsOnly(parts[1] || '').slice(0,2);
+    const milli=digitsOnly(parts[2] || '').slice(0,3);
+    // 秒は従来仕様どおり59秒を上限とする
+    const safeSec=(second && Number(second)>59) ? '59' : second;
+    // ミリ秒は入力桁を右側0埋め（33 → 330）
+    const safeMs=milli ? milli.padEnd(3,'0') : '';
+    document.getElementById(prefix+'M').value=minute;
+    document.getElementById(prefix+'S').value=safeSec;
+    document.getElementById(prefix+'Ms').value=safeMs;
+}
+
+// 2026.11.13 修正：％表示は「100.00」。旧形式「100/00」も読み取り可能にする
+function setLegacyPercent(formatted){
+    const parts=String(formatted || '').split(/[./]/);
+    const integer=digitsOnly(parts[0]).slice(0,6);
+    const decimal=digitsOnly(parts[1] || '').slice(0,2);
+    document.getElementById('baseP_int').value=integer;
+    document.getElementById('baseP_dec').value=decimal;
+}
+
+function syncCombinedToLegacy(){
+    setLegacyTime('top',document.getElementById('topTimeInput').value);
+    setLegacyPercent(document.getElementById('basePercentInput').value);
+    setLegacyTime('my',document.getElementById('myTimeInput').value);
+    updateTimeInterpretation('topTimeInput','topTimeInterpretation');
+    updateTimeInterpretation('myTimeInput','myTimeInterpretation');
+}
+
+/* 2026.11.13 追加：入力途中でも旧形式へ反映し、従来処理で即時計算・保存 */
+function onCombinedInput(el, kind){
+    const oldValue=el.value;
+    const pos=el.selectionStart || oldValue.length;
+    const digitsBefore=digitsOnly(oldValue.slice(0,pos)).length;
+    const formatted=(kind==='percent') ? formatPercentDigits(oldValue) : formatTimeDigits(oldValue);
+    el.value=formatted;
+    // ％欄は自動挿入した「/」の後ろへカーソルを移動。
+    // タイム欄はユーザーが「/」を入力するため、通常はカーソル位置を変更しない。
+    if(kind==='percent' || formatted!==oldValue){
+        let newPos=0, count=0;
+        if(digitsBefore>0){
+            for(let i=0;i<el.value.length;i++){
+                if(/[0-9]/.test(el.value[i])) count++;
+                newPos=i+1;
+                if(count===digitsBefore) break;
+            }
+        }
+        // 2026.11.13 追加：％欄で末尾に入力した場合は、自動で入る「.」の後ろ（末尾）へカーソルを置く
+        if(kind==='percent' && pos>=oldValue.length) newPos=el.value.length;
+        try{ el.setSelectionRange(newPos,newPos); }catch(e){}
+    }
+    syncCombinedToLegacy();
+    saveAndCalc();
+}
+
+/* 2026.11.13 修正：％は小数1桁を右側0埋め。100％未満は100.00へ補正 */
+function finalizeCombinedPercent(){
+    const el=document.getElementById('basePercentInput');
+    /* 2026.11.13 変更：表示中の「.」位置で整数部・小数部を分ける（100/05 や 10/55 を正しく判定するため） */
+    const parts=el.value.split('.');
+    const integer=digitsOnly(parts[0]).slice(0,3);
+    let decimal=digitsOnly(parts[1] || '').slice(0,2);
+    if(!integer && !decimal){ el.value=''; syncCombinedToLegacy(); saveAndCalc(); return; }
+    const intValue=parseInt(integer || '0',10);
+    if(integer.length<3 || intValue<100){
+        el.value='100.00';
+    }else{
+        decimal=decimal.padEnd(2,'0');
+        el.value=integer+'.'+decimal;
+    }
+    syncCombinedToLegacy();
+    saveAndCalc();
+}
+
+/* 2026.11.13 追加：旧localStorageデータを統合欄へ読み替える */
+function loadCombinedInputs(){
+    const get=id=>localStorage.getItem(id) || '';
+    // 旧データは分1桁・秒2桁・ミリ秒3桁で保存されていたため、各要素を個別に桁合わせ
+    const top=[get('topM').padStart(2,'0'),get('topS').padStart(2,'0'),get('topMs').padStart(3,'0')].join('');
+    const mine=[get('myM').padStart(2,'0'),get('myS').padStart(2,'0'),get('myMs').padStart(3,'0')].join('');
+    const pInt=get('baseP_int'), pDec=get('baseP_dec');
+    document.getElementById('topTimeInput').value=(get('topM') || get('topS') || get('topMs')) ? [get('topM').padStart(2,'0'),get('topS').padStart(2,'0'),get('topMs').padStart(3,'0')].join('/') : '';
+    document.getElementById('myTimeInput').value=(get('myM') || get('myS') || get('myMs')) ? [get('myM').padStart(2,'0'),get('myS').padStart(2,'0'),get('myMs').padStart(3,'0')].join('/') : '';
+    document.getElementById('basePercentInput').value=pInt ? (pInt+'.'+String(pDec || '0').padEnd(2,'0')) : '';
+    syncCombinedToLegacy();
+    calculate();
+    // 初期表示は日本語形式。編集のためにフォーカスすると「/」形式へ戻す
+    document.getElementById('topTimeInput').value=timeInputToJapanese(document.getElementById('topTimeInput').value);
+    document.getElementById('myTimeInput').value=timeInputToJapanese(document.getElementById('myTimeInput').value);
+}
+
+/* 2026.11.13 変更：統合欄をタップしたら全選択、Enterで次の欄へ移動 */
+fieldOrder.forEach((id,index)=>{
+    const el=document.getElementById(id);
+    el.addEventListener('focus',()=>{
+        if(id!=='basePercentInput') el.value=japaneseToTimeInput(el.value);
+        setTimeout(()=>el.select(),0);
+    });
+    el.addEventListener('click',()=>setTimeout(()=>el.select(),0));
+    el.addEventListener('input',()=>onCombinedInput(el,id==='basePercentInput'?'percent':'time'));
+    el.addEventListener('blur',()=>{
+        if(id==='basePercentInput') finalizeCombinedPercent();
+        else if(el.value){
+            syncCombinedToLegacy(); saveAndCalc();
+            el.value=timeInputToJapanese(el.value);
+        }
+    });
+    el.addEventListener('keydown',e=>{
+        if(e.isComposing || e.keyCode===229) return;
+        if(e.key==='Enter'){
+            e.preventDefault();
+            focusNext(id);
+        }
+    });
+});
+
+/* ===== 2026.11.13 追加：スマホ用 独自キーパッド =====
+   標準キーボードに「/」が無い問題への対策。
+   入力欄は inputmode="none" で標準キーボードを出さず、画面下のキーパッドから入力する。
+   キー入力後は 'input' イベントを発火し、既存の onCombinedInput() → 計算・保存の流れをそのまま利用する。 */
+const keypadEl=document.getElementById('keypad');
+let keypadField=null;
+
+function keypadShow(el){
+    keypadField=el;
+    keypadEl.classList.add('open');
+    document.body.classList.add('kp-open');
+    // 2026.11.13 変更：％欄でも「/」を使うため、無効化は廃止
+    setTimeout(()=>{ try{ el.scrollIntoView({block:'center',behavior:'smooth'}); }catch(e){} },50);
+}
+
+function keypadHide(){
+    keypadEl.classList.remove('open');
+    document.body.classList.remove('kp-open');
+    keypadField=null;
+}
+
+function keypadInsert(ch){
+    const el=keypadField;
+    if(!el) return;
+    // 選択中（フォーカス直後は全選択）なら置き換え、そうでなければカーソル位置に挿入
+    el.setRangeText(ch, el.selectionStart, el.selectionEnd, 'end');
+    el.dispatchEvent(new Event('input',{bubbles:true}));
+}
+
+function keypadBackspace(){
+    const el=keypadField;
+    if(!el) return;
+    let s=el.selectionStart;
+    const e=el.selectionEnd;
+    if(s===e){
+        if(s===0) return;
+        s--;
+        // ％欄の自動「.」は一緒に消して、その前の数字まで削除する
+        if(el.id==='basePercentInput' && el.value[s]==='.' && s>0) s--;
+    }
+    el.setRangeText('', s, e, 'end');
+    el.dispatchEvent(new Event('input',{bubbles:true}));
+}
+
+function keypadNext(){
+    if(keypadField) focusNext(keypadField.id);
+}
+
+function keypadClose(){
+    finishInput();
+    keypadHide();
+}
+
+fieldOrder.forEach(id=>{
+    const el=document.getElementById(id);
+    el.addEventListener('focus',()=>keypadShow(el));
+    // 入力欄以外へフォーカスが移った場合のみキーパッドを閉じる
+    el.addEventListener('blur',()=>setTimeout(()=>{
+        const a=document.activeElement;
+        if(!(a && fieldOrder.includes(a.id))) keypadHide();
+    },100));
+});
+
+// キーパッドをタップしても入力欄のフォーカスが外れないようにする
+keypadEl.addEventListener('mousedown',e=>e.preventDefault());
+
+keypadEl.addEventListener('click',e=>{
+    const b=e.target.closest('button');
+    if(!b || b.disabled) return;
+    const k=b.dataset.key;
+    if(k==='back') keypadBackspace();
+    else if(k==='next') keypadNext();
+    else if(k==='close') keypadClose();
+    else keypadInsert(k);
+});
+
+window.onload=()=>{
+    loadCombinedInputs();
+};
+
+/* 2026.11.13 修正：統合入力欄の値を直接ミリ秒へ変換する
+   入力中の「分/秒/ミリ秒」と、フォーカスを外した後の「分・秒・ミリ秒」の両方に対応 */
+function combinedTimeToMs(inputId, prefix){
+    const raw=String(document.getElementById(inputId).value || '').trim();
+    let match=raw.match(/^(\d+)\/(\d{1,2})\/(\d{1,3})$/);
+    if(!match) match=raw.match(/^(\d+)分(\d{1,2})秒(\d{1,3})$/);
+    if(match){
+        const minute=Number(match[1]);
+        const second=Number(match[2]);
+        const milli=Number(String(match[3]).padEnd(3,'0'));
+        if(second>59) return 0;
+        return minute*60000+second*1000+milli;
+    }
+    // 旧保存データとの互換用。統合欄が未入力の場合のみ旧欄を参照
+    return Number(document.getElementById(prefix+'M').value||0)*60000+
+           Number(document.getElementById(prefix+'S').value||0)*1000+
+           Number(document.getElementById(prefix+'Ms').value||0);
+}
+
+function calculate(){
+
+    const topMs=combinedTimeToMs('topTimeInput','top');
+    const myMs=combinedTimeToMs('myTimeInput','my');
+
+    const basePInt=Number(document.getElementById('baseP_int').value||0);
+    const basePDec=String(document.getElementById('baseP_dec').value||'0').padEnd(2,'0').slice(0,2);
+    const baseP=basePInt+Number(basePDec)/100;
+
+    const tbody=document.getElementById('tableBody');
+    const onePercentEl=document.getElementById('onePercent');
+
+    tbody.innerHTML='';
+
+    if(topMs===0 || baseP===0){
+
+        document.getElementById('result').innerText=
+            'あなたの％: ---';
+
+        onePercentEl.innerText='';
+
+        return;
+    }
+
+    // 2026.11.13 修正：TOP％補正を先に行い、100％相当タイムを求める。
+    // 例：TOP 62.300秒が100.30％の場合
+    // 62.300 ÷ 1.003 ＝ 62.113659...秒（これが100％基準タイム）
+    // 100.3％の補正を忘れると、1％表示もあなたの％も誤った値になる。
+    const virtual100Ms = topMs / (baseP / 100);
+
+    // 1％あたりの時間は、補正後の100％基準タイムを100で割る。
+    // 内部計算では丸めず、表示時だけ小数第2位に四捨五入する。
+    const onePercentSec = virtual100Ms / 100 / 1000;
+    onePercentEl.innerText = `1％ ＝ ${onePercentSec.toFixed(2)}秒`;
+
+    const rates=[
+        100,
+        105,
+        107,
+        110,
+        115,
+        120,
+        125,
+        130
+    ];
+
+    rates.forEach(r=>{
+
+        const ms=
+            virtual100Ms*(r/100);
+
+        const m=
+            Math.floor(ms/60000);
+
+        const s=
+            Math.floor((ms%60000)/1000);
+
+        const mil=
+            Math.floor(ms%1000);
+
+        tbody.innerHTML+=`
+        <tr>
+            <td>${r}％</td>
+            <td>
+                ${m}分${s.toString().padStart(2,'0')}秒${mil.toString().padStart(3,'0')}
+            </td>
+        </tr>`;
+    });
+
+    const resultEl=document.getElementById('result');
+
+    if(myMs>0){
+
+        // 2026.11.13 修正：自分のタイムも補正後の100％基準タイムと比較する。
+        // 途中の秒数・1％表示値では丸めず、最後の表示時だけ小数第2位にする。
+        // 例：83.555秒 ÷ 62.113659...秒 × 100 ＝ 134.52％
+        const myPercent = ((myMs / virtual100Ms) * 100).toFixed(2);
+
+        resultEl.innerText=
+            `あなたの％: ${myPercent}％`;
+
+        /* 2026.07.30 追加: 100％未満でオレンジ背景 */
+        if(myPercent < 100){
+            resultEl.classList.add('under-100');
+        }else{
+            resultEl.classList.remove('under-100');
+        }
+
+    }else{
+
+        resultEl.innerText=
+            'あなたの％: ---';
+        resultEl.classList.remove('under-100');
+    }
+}
+
 </script>
+
 </body>
 </html>
