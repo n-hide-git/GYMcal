@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>東海4県 AI・DX・製造関連イベントカレンダー 2026–2027</title>
+<style>
+:root{--ink:#172536;--muted:#64748b;--line:#dbe3ec;--bg:#f3f6fa;--blue:#174b78;--teal:#0f766e;--gold:#b7791f;--white:#fff}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--ink);font-family:"Yu Gothic UI","Meiryo",sans-serif;line-height:1.65}
+header{background:linear-gradient(120deg,#102d49,#1b5c78);color:white;padding:34px max(22px,calc((100% - 1180px)/2)) 30px}
+.kicker{font-size:12px;letter-spacing:.16em;opacity:.8} h1{font-size:clamp(25px,4vw,38px);line-height:1.25;margin:9px 0 12px}
+header p{max-width:850px;margin:0;color:#e4edf4}
+.wrap{max-width:1180px;margin:auto;padding:22px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:white;border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 18px}
+.toolbar input,.toolbar select{padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;background:white}
+.toolbar input{flex:1;min-width:210px}.toolbar button{border:0;background:#e8eef5;color:#17324a;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700}
+.note{font-size:13px;color:var(--muted);margin:0 0 18px}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}.chip{font-size:12px;border-radius:99px;padding:4px 10px;background:#e8eef5;color:#24445e}
+.month{margin:25px 0 12px;display:flex;align-items:center;gap:12px}.month h2{font-size:22px;margin:0}.month:after{content:"";height:1px;background:var(--line);flex:1}
+.event{display:grid;grid-template-columns:180px 1fr;gap:0;background:white;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:12px 0;box-shadow:0 2px 8px #19324b0a}
+.visual{position:relative;min-height:170px;background:#dbe6ed}.visual img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover}.visual:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#102d49a8,transparent 65%)}
+.visual span{position:absolute;z-index:1;bottom:10px;left:12px;color:white;font-size:12px;font-weight:700;text-shadow:0 1px 3px #000}
+.content{padding:16px 18px}.topline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.date{font-weight:800;color:#173f61;font-variant-numeric:tabular-nums}.venue{background:#edf3f7;border-radius:6px;padding:2px 8px}
+h3{font-size:19px;line-height:1.35;margin:7px 0}.content p{margin:6px 0 10px;font-size:14px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.tag{font-size:11px;padding:3px 8px;border-radius:5px;background:#eef5f4;color:#17635c}
+.actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}.official{display:inline-block;background:var(--blue);color:white;text-decoration:none;padding:7px 12px;border-radius:7px;font-size:13px;font-weight:700}.official:hover{background:#0e385c}
+.status{font:inherit;font-size:13px;padding:6px 8px;border:1px solid #cbd5e1;border-radius:7px;background:white}.memo{font:inherit;font-size:13px;padding:7px 9px;border:1px solid #d5dde6;border-radius:7px;min-width:150px;flex:1}
+.priority{font-size:11px;font-weight:800;color:#9a5b09;background:#fff4dc;border-radius:5px;padding:3px 7px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:12px 0 24px}.calhead,.calcell{border-radius:8px;padding:7px;text-align:center;font-size:12px}.calhead{background:#dce7ef;font-weight:800}.calcell{background:white;border:1px solid var(--line);min-height:46px}.calcell strong{display:block;font-size:15px}.calcell small{display:block;color:var(--muted);font-size:10px}.calcell.has{border-color:#6b9bb5;background:#eaf4f8}
+.section-title{font-size:22px;margin:28px 0 10px}.venue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.venue-card{background:white;border:1px solid var(--line);border-radius:12px;padding:15px}.venue-card h3{font-size:16px;margin:0 0 4px}.venue-card p{font-size:13px;color:var(--muted);margin:0}
+footer{max-width:1180px;margin:20px auto;padding:20px 22px 40px;color:var(--muted);font-size:12px}
+@media(max-width:700px){.event{grid-template-columns:1fr}.visual{height:145px;min-height:145px}.venue-grid{grid-template-columns:1fr}.wrap{padding:14px}.content{padding:14px}.calendar{gap:3px}.calcell{padding:5px 2px}}
+@media print{body{background:white}.toolbar,.actions button{display:none!important}.wrap{max-width:none;padding:0 8mm}.event{break-inside:avoid;box-shadow:none}.official{background:white;color:#174b78;border:1px solid #174b78}header{padding:18px 8mm}.visual{min-height:115px}.venue-grid{break-inside:avoid}}
+
+/* 左側20%：全日付入り小型カレンダー／右側80%：独立スクロール */
+.planner-layout{display:grid;grid-template-columns:minmax(210px,20%) minmax(0,1fr);gap:18px;align-items:start}
+.calendar-sidebar{position:sticky;top:10px;height:calc(100vh - 20px);overflow-y:auto;background:#eaf0f5;border:1px solid var(--line);border-radius:13px;padding:10px}
+.sidebar-heading{font-size:16px;font-weight:800;color:#173f61}
+.sidebar-sub{font-size:10px;line-height:1.4;color:var(--muted);margin:3px 0 10px}
+#calendar .month{margin:12px 0 4px;display:block}
+#calendar .month h2{font-size:13px;margin:0;color:#24445e}
+#calendar .month:after{display:none}
+#calendar .calendar{grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;margin:4px 0 10px}
+#calendar .calhead,#calendar .calcell{border-radius:3px;padding:2px 0;text-align:center;font-size:9px;min-width:0}
+#calendar .calhead{background:#dce7ef}
+#calendar .calcell{min-height:23px;height:23px;border:1px solid #dbe3ec;background:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;line-height:1.05}
+#calendar .calcell strong{font-size:10px;line-height:1.1}
+#calendar .calcell small{font-size:7px;line-height:1;color:#17635c}
+#calendar .calcell.has{background:#cfe7f1;border-color:#6b9bb5;color:#123d5b;font-weight:800;cursor:pointer}
+#calendar .calcell.has:hover{background:#a9d2e3}
+#calendar .calcell.empty{background:transparent;border-color:transparent}
+.event-scroll{height:calc(100vh - 20px);overflow-y:auto;overscroll-behavior:contain;padding:0 5px 24px 0;scroll-behavior:smooth}
+.event-scroll>.section-title:first-child{margin-top:2px}
+.event{scroll-margin-top:12px}
+@media(max-width:760px){
+ .planner-layout{grid-template-columns:1fr;gap:12px}
+ .calendar-sidebar{position:relative;top:auto;height:auto;max-height:260px}
+ #calendar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ #calendar .month{margin:5px 0}
+ .event-scroll{height:auto;overflow:visible;padding:0}
+}
+@media print{
+ .planner-layout{display:block}
+ .calendar-sidebar{position:static;height:auto;overflow:visible;margin-bottom:16px}
+ #calendar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ .event-scroll{height:auto;overflow:visible}
+}
+
+
+/* 2026-11-11 調整：上部見出しをコンパクト化し、画面上部に固定 */
+:root{--header-height:108px}
+header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:1000;
+  padding:12px max(22px,calc((100% - 1180px)/2)) 11px;
+  box-shadow:0 2px 10px #102d4922;
+}
+header .kicker{font-size:10px;line-height:1.2}
+header h1{
+  font-size:clamp(19px,2.5vw,27px);
+  line-height:1.18;
+  margin:4px 0 5px;
+}
+header p{font-size:12px;line-height:1.35}
+main.wrap{margin-top:var(--header-height)}
+@media(max-width:760px){
+  :root{--header-height:132px}
+  header{padding:10px 14px}
+  header h1{font-size:19px;margin:4px 0}
+  header p{font-size:11px}
+}
+
+
+/* 2026-11-12 refresh: compact fixed control strip; maximize event reading area */
+:root{--fixed-top:126px}
+header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:9px 18px 8px;box-shadow:0 2px 12px #102d4930}
+header .kicker{font-size:9px;line-height:1.1}
+header h1{font-size:19px;line-height:1.1;margin:2px 0 3px}
+header p{font-size:11px;line-height:1.25;margin:0;max-width:none}
+header .toolbar{margin:7px auto 0;max-width:1400px;padding:5px 7px;border:0;border-radius:8px;gap:6px;background:#ffffff18}
+header .toolbar input,header .toolbar select{font-size:12px;padding:5px 8px;min-height:30px}
+header .toolbar input{min-width:150px}
+header .toolbar button{font-size:11px;padding:6px 9px;min-height:30px}
+main.wrap{max-width:none;margin:var(--fixed-top) 0 0;padding:10px 14px 0}
+.note{font-size:11px;margin:0 0 4px}.legend{margin:0 0 5px;gap:5px}.chip{font-size:10px;padding:2px 7px}
+.planner-layout{grid-template-columns:minmax(180px,17%) minmax(0,1fr);gap:12px}
+.calendar-sidebar{top:calc(var(--fixed-top) + 6px);height:calc(100vh - var(--fixed-top) - 12px);padding:8px}
+.event-scroll{height:calc(100vh - var(--fixed-top) - 10px);padding:0 8px 28px 0}
+.event{grid-template-columns:minmax(190px,22%) minmax(0,1fr);margin:8px 0;border-radius:11px}
+.visual{min-height:190px}.content{padding:14px 17px}.content p{font-size:13px;line-height:1.5}
+.content h3{font-size:18px}
+#calendar .month{margin:8px 0 3px}#calendar .calcell{height:21px;min-height:21px}
+#calendar .calcell.has{cursor:pointer}
+.event.jump-highlight{outline:3px solid #e69b24;box-shadow:0 0 0 5px #e69b2428}
+@media(max-width:760px){:root{--fixed-top:184px}header{padding:8px 10px}header h1{font-size:17px}header p{font-size:10px}header .toolbar{gap:4px}header .toolbar input{min-width:100%;flex-basis:100%}header .toolbar select{flex:1;min-width:0}.planner-layout{grid-template-columns:1fr}.calendar-sidebar{top:auto;height:155px;max-height:155px;overflow:auto}#calendar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.event-scroll{height:auto;max-height:none;overflow:visible}.event{grid-template-columns:1fr}.visual{height:145px;min-height:145px}main.wrap{padding:8px 10px}}
+@media print{header{position:static;box-shadow:none}main.wrap{margin:0}.planner-layout{display:block}.calendar-sidebar{position:static;height:auto;overflow:visible}.event-scroll{height:auto;overflow:visible}.toolbar{display:none!important}}
+
+</style>
+</head>
+<body>
+<header>
+ <div class="kicker">EVENT PLANNER / TOKAI 4 PREFECTURES</div>
+ <h1>名古屋近郊 展示会・イベント検討カレンダー<br>2026.11 — 2027.07</h1>
+ <p>愛知・岐阜・三重・静岡｜AI・DX・IT・製造・自動車・加工・生産技術の関連イベント｜2026.11 — 2027.07</p>
+ <div class="toolbar">
+  <input id="search" type="search" placeholder="イベント名・テーマ・会場で検索">
+  <select id="region"><option value="">4県すべて</option><option>愛知県</option><option>岐阜県</option><option>三重県</option><option>静岡県</option></select>
+  <select id="area"><option value="">全会場</option></select>
+  <select id="category"><option value="">全テーマ</option><option>製造・加工</option><option>自動車・モビリティ</option><option>DX・AI・IT</option><option>ロボット・自動化</option></select>
+  <button onclick="window.print()">印刷 / PDF保存</button>
+  <button onclick="clearChoices()">検討状況をリセット</button>
+ </div>
+</header>
+<main class="wrap">
+ <p class="note">検討状況・メモはこのブラウザー内に保存されます。開催日・内容・申込条件は公式ページで再確認してください。</p>
+ <div class="legend"><span class="chip">◎ おすすめ候補</span><span class="chip">公式情報確認済み／一部は今後更新</span></div>
+ <div class="planner-layout">
+ <aside class="calendar-sidebar" aria-label="日付入り月間カレンダー">
+  <div class="sidebar-heading">開催カレンダー</div>
+  <p class="sidebar-sub">全日付を縮小表示。開催日は色付きです。</p>
+  <div id="calendar"></div>
+ </aside>
+ <section class="event-scroll" id="eventsPanel">
+  <h2 class="section-title">イベント一覧・紹介</h2>
+  <div id="events"></div>
+  <h2 class="section-title">会場メモ</h2>
+  <div class="venue-grid">
+  <div class="venue-card"><h3>ポートメッセなごや</h3><p>名古屋市港区金城ふ頭。製造業・ものづくり・IT系の大型展示会が多い会場。</p></div>
+  <div class="venue-card"><h3>吹上ホール</h3><p>名古屋市千種区吹上。地下鉄桜通線「吹上駅」から徒歩約5分。</p></div>
+  <div class="venue-card"><h3>JPタワー名古屋</h3><p>名古屋駅直結エリア。セミナー・カンファレンス型のイベントに便利。</p></div>
+  <div class="venue-card"><h3>Aichi Sky Expo</h3><p>常滑市・中部国際空港島。中部国際空港駅から徒歩約5分。</p></div>
+ </div>
+ </section>
+</div>
+</main>
+<footer><strong>調査メモ</strong><br>対象期間：2026年11月〜2027年7月。対象地域：愛知・岐阜・三重・静岡。開催が確認できた関連イベントを掲載しています。対象期間内に4県で該当イベントが見つからない月もあります。日程・会場・申込状況は変更される場合があるため、参加前に公式情報をご確認ください。</footer>
+<script>
+const events = [
+  {
+    "date": "2026-11-11",
+    "end": "2026-11-13",
+    "area": "愛知県",
+    "name": "メッセナゴヤ2026",
+    "venue": "ポートメッセなごや",
+    "cat": "製造・加工",
+    "tags": [
+      "製造業",
+      "技術・サービス",
+      "企業交流"
+    ],
+    "desc": "幅広い企業・技術が集まる異業種交流展示会。製造業の技術・製品・サービスや新たな取引先を探せる。",
+    "fit": "製造技術・業務改善につながる出展を絞って見学。",
+    "url": "https://www.messenagoya.jp/",
+    "img": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
+    "priority": false
+  },
+  {
+    "date": "2026-11-12",
+    "end": "2026-11-14",
+    "area": "岐阜県",
+    "name": "関の工場参観日2026",
+    "venue": "せきてらす・関市内参加工場",
+    "cat": "製造・加工",
+    "tags": [
+      "工場見学",
+      "金属加工",
+      "刃物・精密製造"
+    ],
+    "desc": "関市内の工場を見学し、職人技や精密な製造工程に触れる産業観光イベント。",
+    "fit": "現場の加工工程・技能・ものづくりの工夫を知る機会。",
+    "url": "https://www.kankou-gifu.jp/event/detail_9719.html",
+    "img": "https://images.unsplash.com/photo-1567789884554-0b844b597180?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2026-11-19",
+    "end": "2026-11-20",
+    "area": "愛知県",
+    "name": "TECH Biz EXPO 2026",
+    "venue": "ポートメッセなごや 第1展示館",
+    "cat": "製造・加工",
+    "tags": [
+      "次世代ものづくり",
+      "加工技術",
+      "特殊素材",
+      "高精度部品"
+    ],
+    "desc": "独自加工・特殊素材・高精度部品など、中小製造業の高度な基盤技術を発信する展示会。AI・ロボティクス・新素材分野も対象。",
+    "fit": "試作・加工・部品製造の新技術や協力会社候補を探す。",
+    "url": "https://www.techbizexpo.com/",
+    "img": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2026-11-25",
+    "end": "2026-11-25",
+    "area": "三重県",
+    "name": "みえ・あいち・ぎふ「次世代産業参入展示商談会 in 安永」",
+    "venue": "株式会社安永 本社",
+    "cat": "製造・加工",
+    "tags": [
+      "新技術",
+      "新工法",
+      "エンジン部品",
+      "機械装置"
+    ],
+    "desc": "東海三県の中小企業が、エンジン部品・機械装置・環境機器分野の安永に新技術や新工法を提案する展示商談会。",
+    "fit": "自動車部品・加工技術・新規取引先の観点で注目。",
+    "url": "https://www.miesc.or.jp/support/contents/1572/",
+    "img": "https://images.unsplash.com/photo-1581092335878-2d9ff86ca2bf?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2026-11-25",
+    "end": "2026-11-27",
+    "area": "愛知県",
+    "name": "オートモーティブ ワールド 名古屋（自動車部品＆加工・SDV等）",
+    "venue": "Aichi Sky Expo",
+    "cat": "自動車・モビリティ",
+    "tags": [
+      "自動車部品",
+      "加工",
+      "車載ソフトウェア",
+      "電動化"
+    ],
+    "desc": "クルマの先端技術展。自動車部品＆加工EXPO、SDV EXPO、カーエレクトロニクス、サステナブル技術などを同時開催。",
+    "fit": "自動車部品メーカーの材料・加工・車載電子・ソフトウェア動向を確認。",
+    "url": "https://www.automotiveworld.jp/nagoya/ja-jp.html",
+    "img": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2026-11-25",
+    "end": "2026-11-27",
+    "area": "愛知県",
+    "name": "ネプコン ジャパン 名古屋",
+    "venue": "Aichi Sky Expo",
+    "cat": "製造・加工",
+    "tags": [
+      "電子部品",
+      "実装",
+      "半導体・基板",
+      "検査装置"
+    ],
+    "desc": "エレクトロニクス開発・実装に関する専門展。電子部品、基板、実装、製造装置などを紹介。",
+    "fit": "車載電子部品・制御基板など周辺技術の確認に。",
+    "url": "https://www.nepconjapan.jp/nagoya/ja-jp.html",
+    "img": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
+    "priority": false
+  },
+  {
+    "date": "2026-11-25",
+    "end": "2026-11-27",
+    "area": "愛知県",
+    "name": "ファクトリーイノベーション Week 名古屋",
+    "venue": "Aichi Sky Expo",
+    "cat": "ロボット・自動化",
+    "tags": [
+      "スマート工場",
+      "AI・DX",
+      "ロボット",
+      "自動化"
+    ],
+    "desc": "スマート工場EXPO、ロボデックス、製造業カーボンニュートラル展、人手不足対策EXPO、工場安全・環境改善EXPOの複合展。",
+    "fit": "工場DX、設備データ活用、予兆保全、AGV/AMR、自動化の情報収集に。",
+    "url": "https://www.fiweek.jp/nagoya/ja-jp/about.html",
+    "img": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2026-11-26",
+    "end": "2026-11-26",
+    "area": "三重県",
+    "name": "航空機業界の現状と中小企業の参入促進講座",
+    "venue": "三重県産業支援センター（ハイブリッド）",
+    "cat": "製造・加工",
+    "tags": [
+      "航空宇宙",
+      "部品製造",
+      "新規参入",
+      "技術動向"
+    ],
+    "desc": "航空機業界の現状と中小企業の参入余地を学ぶ、三重県の航空宇宙産業参入促進講座。",
+    "fit": "自動車部品で培った加工・品質・生産技術の他産業展開を考える材料に。",
+    "url": "https://www.pref.mie.lg.jp/TOPICS/m0031300584.htm",
+    "img": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80",
+    "priority": false
+  },
+  {
+    "date": "2026-12-03",
+    "end": "2026-12-03",
+    "area": "岐阜県",
+    "name": "岐阜・滋賀・三重「モノづくり商談会 in GIFU」",
+    "venue": "大垣フォーラムホテル",
+    "cat": "製造・加工",
+    "tags": [
+      "製造業",
+      "受発注",
+      "個別商談",
+      "企業間連携"
+    ],
+    "desc": "岐阜・滋賀・三重の製造業中小企業と発注企業が、対面で個別商談・情報交換を行う商談会。",
+    "fit": "東海地域の協力会社・発注先・加工ネットワークを探す機会。",
+    "url": "https://www.miesc.or.jp/support/contents/1578/",
+    "img": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80",
+    "priority": false
+  },
+  {
+    "date": "2026-12-04",
+    "end": "2026-12-04",
+    "area": "静岡県",
+    "name": "アルミ部品の品質・溶解・鋳造基礎セミナー",
+    "venue": "静岡県工業技術研究所（静岡市）",
+    "cat": "製造・加工",
+    "tags": [
+      "アルミ部品",
+      "鋳造",
+      "品質",
+      "材料"
+    ],
+    "desc": "高品質なアルミ鋳造部品製造の基礎知識を学ぶ、静岡県工業技術研究所の技術セミナー。",
+    "fit": "アルミ部品の製造品質・材料・鋳造技術に関係。",
+    "url": "https://www.iri.pref.shizuoka.jp/seminar/event/119739/",
+    "img": "https://images.unsplash.com/photo-1567789884554-0b844b597180?auto=format&fit=crop&w=900&q=80",
+    "priority": false
+  },
+  {
+    "date": "2026-12-07",
+    "end": "2026-12-08",
+    "area": "愛知県",
+    "name": "RICOH Value Presentation 2026 名古屋",
+    "venue": "吹上ホール",
+    "cat": "DX・AI・IT",
+    "tags": [
+      "AI",
+      "DX・GX",
+      "業務変革",
+      "製造業DX"
+    ],
+    "desc": "AI活用、DX・GX、業務変革、製造業のモノづくりDXなどをテーマにした展示・セミナー。",
+    "fit": "生成AI・社内業務改善・製造現場DXの事例を探す候補。",
+    "url": "https://vpre.ricoh.co.jp/nagoya/lp/",
+    "img": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2026-12-10",
+    "end": "2026-12-10",
+    "area": "静岡県",
+    "name": "プレス成形シミュレーションセミナー",
+    "venue": "浜松工業技術支援センター",
+    "cat": "製造・加工",
+    "tags": [
+      "プレス成形",
+      "CAE",
+      "シミュレーション",
+      "材料特性"
+    ],
+    "desc": "材料特性の講演、プレス成形シミュレーション体験、支援センターの取組紹介・見学を実施。",
+    "fit": "プレス加工・金型・成形解析・試作検討に直結。",
+    "url": "https://www.iri.pref.shizuoka.jp/seminar/event/117860/",
+    "img": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2026-12-11",
+    "end": "2026-12-11",
+    "area": "岐阜県",
+    "name": "各務原ものづくりDXミニ展示会2026",
+    "venue": "各務原市産業文化センター",
+    "cat": "DX・AI・IT",
+    "tags": [
+      "工場DX",
+      "AI活用",
+      "生産計画",
+      "在庫・検査"
+    ],
+    "desc": "生産計画・在庫・検査・見積・日報など工場業務を支援するサービス企業11社とAI活用セミナーが集まる展示会。",
+    "fit": "Excel業務改善・社内Webアプリ・製造現場のDXに近いテーマ。",
+    "url": "https://www.city.kakamigahara.lg.jp/shisei/shisaku/sangyo/1008446/1022027/1028594.html",
+    "img": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2026-12-15",
+    "end": "2026-12-15",
+    "area": "三重県",
+    "name": "航空宇宙産業参入講座：品質規格で勝つ戦略",
+    "venue": "三重県産業支援センター（ハイブリッド）",
+    "cat": "製造・加工",
+    "tags": [
+      "航空宇宙",
+      "品質規格",
+      "品質保証",
+      "新規参入"
+    ],
+    "desc": "航空宇宙分野への参入に必要な品質規格・認証の考え方を扱う三重県の講座。",
+    "fit": "自動車部品の品質管理・工程管理を他産業へ展開する視点に。",
+    "url": "https://www.pref.mie.lg.jp/TOPICS/m0031300584.htm",
+    "img": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
+    "priority": false
+  },
+  {
+    "date": "2026-12-17",
+    "end": "2026-12-17",
+    "area": "静岡県",
+    "name": "硬さ試験・金属部品の品質計測セミナー",
+    "venue": "浜松工業技術支援センター",
+    "cat": "製造・加工",
+    "tags": [
+      "硬さ試験",
+      "品質保証",
+      "計測",
+      "金属部品"
+    ],
+    "desc": "薄膜から金属部品までを対象に、硬さ試験機の機能・活用法と機器見学を行う技術セミナー。",
+    "fit": "品質管理・検査・測定の知識や設備活用の参考に。",
+    "url": "https://www.iri.pref.shizuoka.jp/seminar/event/118597/",
+    "img": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
+    "priority": false
+  },
+  {
+    "date": "2027-01-07",
+    "end": "2027-01-07",
+    "area": "静岡県",
+    "name": "家電・自動車プラスチックリサイクル技術講習会",
+    "venue": "静岡県工業技術研究所（静岡市）",
+    "cat": "自動車・モビリティ",
+    "tags": [
+      "自動車樹脂",
+      "材料",
+      "リサイクル",
+      "生産技術"
+    ],
+    "desc": "家電・自動車に使われるプラスチックのリサイクル課題、技術動向、材料・ものづくりの今後を扱う講習会。",
+    "fit": "自動車部品の樹脂材料・軽量化・資源循環の情報収集に。",
+    "url": "https://www.iri.pref.shizuoka.jp/seminar/event/121069/",
+    "img": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2027-01-29",
+    "end": "2027-01-30",
+    "area": "静岡県",
+    "name": "ものづくり力交流フェア2027",
+    "venue": "富士市産業交流展示場 ふじさんめっせ",
+    "cat": "製造・加工",
+    "tags": [
+      "ものづくり企業",
+      "技術・製品",
+      "企業間交流",
+      "デジタル展示"
+    ],
+    "desc": "富士市のものづくり企業が技術・製品を発信する産業交流展示会。デジタル展示会やビジネスマッチングも予定。",
+    "fit": "地域の製造企業・加工技術・協業先を探すのに有用。",
+    "url": "https://www.city.fuji.shizuoka.jp/shigoto/sangyoshinko/fair/index.html",
+    "img": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2027-01-29",
+    "end": "2027-01-29",
+    "area": "三重県",
+    "name": "航空宇宙産業参入講座：中小企業の宇宙市場開拓",
+    "venue": "三重県産業支援センター（ハイブリッド）",
+    "cat": "製造・加工",
+    "tags": [
+      "航空宇宙",
+      "精密加工",
+      "新規市場",
+      "技術提案"
+    ],
+    "desc": "中小企業による宇宙市場開拓の戦略を学ぶ、三重県の航空宇宙産業参入促進講座。",
+    "fit": "精密部品・加工技術・品質保証の新たな市場を知る機会。",
+    "url": "https://www.pref.mie.lg.jp/TOPICS/m0031300584.htm",
+    "img": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=900&q=80",
+    "priority": false
+  },
+  {
+    "date": "2027-02-17",
+    "end": "2027-02-19",
+    "area": "愛知県",
+    "name": "高機能素材 Week 名古屋／マテリアルDX展",
+    "venue": "ポートメッセなごや",
+    "cat": "製造・加工",
+    "tags": [
+      "先端材料",
+      "素材DX",
+      "材料開発",
+      "リサイクル"
+    ],
+    "desc": "高機能素材・サステナブル材料・材料開発・評価・加工に加え、材料業界向けAI・DXソリューションを扱う複合展示会。",
+    "fit": "自動車部品の材料・軽量化・材料データ活用に。",
+    "url": "https://www.material-expo.jp/nagoya/ja-jp.html",
+    "img": "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2027-02-25",
+    "end": "2027-02-26",
+    "area": "愛知県",
+    "name": "自動認識総合展 名古屋 2027",
+    "venue": "吹上ホール",
+    "cat": "DX・AI・IT",
+    "tags": [
+      "RFID",
+      "バーコード",
+      "画像認識",
+      "トレーサビリティ"
+    ],
+    "desc": "RFID、ICタグ、バーコード、QR、画像認識などの自動認識技術を紹介。",
+    "fit": "部品管理・製造履歴・工程トレーサビリティの改善に。",
+    "url": "https://www.autoid-expo.com/nagoya/jp/visit/",
+    "img": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2027-02-26",
+    "end": "2027-02-26",
+    "area": "愛知県",
+    "name": "DXシステム開発 Expo／ものづくりDX Expo／AI Innovation Expo",
+    "venue": "JPタワー名古屋 ホール&カンファレンス",
+    "cat": "DX・AI・IT",
+    "tags": [
+      "AIエージェント",
+      "システム開発",
+      "製造DX",
+      "内製化"
+    ],
+    "desc": "システム開発の内製化、AIエージェント、製造現場のDX、データAI活用を扱う3展同時開催イベント。",
+    "fit": "社内Webアプリ開発・生成AI・業務システムの実務活用に近い。",
+    "url": "https://f2ff.jp/event/dx-ai",
+    "img": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2027-03-24",
+    "end": "2027-03-25",
+    "area": "愛知県",
+    "name": "Security Days Spring 2027 名古屋",
+    "venue": "ウインクあいち",
+    "cat": "DX・AI・IT",
+    "tags": [
+      "サイバーセキュリティ",
+      "情報システム",
+      "クラウド"
+    ],
+    "desc": "企業の情報システム・クラウド利用を支えるセキュリティ関連カンファレンス・展示。",
+    "fit": "社内Webシステムやクラウド導入時のセキュリティ知識に。",
+    "url": "https://www.securitydays.jp/",
+    "img": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=900&q=80",
+    "priority": false
+  },
+  {
+    "date": "2027-04-07",
+    "end": "2027-04-09",
+    "area": "愛知県",
+    "name": "ものづくり ワールド 名古屋 2027",
+    "venue": "ポートメッセなごや",
+    "cat": "製造・加工",
+    "tags": [
+      "設計・製造DX",
+      "機械要素",
+      "3Dプリンタ",
+      "計測・検査",
+      "フィジカルAI"
+    ],
+    "desc": "設計・製造ソリューション、機械要素、工場設備、3Dプリンタ、計測・検査、製造業DX、フィジカルAIなどの専門展が集結。",
+    "fit": "工程設計・試作・設備・品質・データ活用まで幅広く情報収集。",
+    "url": "https://www.manufacturing-world.jp/nagoya/ja-jp/about.html",
+    "img": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2027-05-18",
+    "end": "2027-05-21",
+    "area": "愛知県",
+    "name": "DXPO 名古屋 ’27（製造テック・業務改革AI等）",
+    "venue": "ポートメッセなごや",
+    "cat": "DX・AI・IT",
+    "tags": [
+      "製造テックDX",
+      "業務改革AI",
+      "IT・情シス",
+      "業務効率化"
+    ],
+    "desc": "製造テックDXPOを含む、業務別DX製品・サービスの展示会。開催日程はテーマごとに分かれる。",
+    "fit": "社内業務のシステム化・Excel業務改善・AI活用の参考に。",
+    "url": "https://dxpo.jp/real/fox/nagoya/",
+    "img": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2027-06-02",
+    "end": "2027-06-04",
+    "area": "愛知県",
+    "name": "AXIA EXPO 2027",
+    "venue": "Aichi Sky Expo",
+    "cat": "製造・加工",
+    "tags": [
+      "水素・アンモニア",
+      "再生可能エネルギー",
+      "脱炭素",
+      "工場エネルギー"
+    ],
+    "desc": "水素・アンモニア、再生可能エネルギー、CO2回収・利用など、脱炭素・エネルギー技術の展示会。",
+    "fit": "製造業のエネルギー・環境対応の情報収集に。",
+    "url": "https://axia-expo.nikkan.co.jp/",
+    "img": "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=900&q=80",
+    "priority": false
+  },
+  {
+    "date": "2027-07-21",
+    "end": "2027-07-23",
+    "area": "愛知県",
+    "name": "Japan IT Week／Japan DX & AX Week 名古屋",
+    "venue": "ポートメッセなごや",
+    "cat": "DX・AI・IT",
+    "tags": [
+      "IT・システム",
+      "AI・AX",
+      "DX",
+      "セキュリティ"
+    ],
+    "desc": "IT・システム、AI、業務自動化、DX関連の製品・サービスを比較する総合展示会。",
+    "fit": "社内システム・DX推進・AI導入の選択肢を広く見る目的に。",
+    "url": "https://www.japan-it.jp/nagoya/ja-jp.html",
+    "img": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  },
+  {
+    "date": "2027-07-21",
+    "end": "2027-07-23",
+    "area": "愛知県",
+    "name": "人とモビリティのテクノロジー展 2027 NAGOYA",
+    "venue": "Aichi Sky Expo",
+    "cat": "自動車・モビリティ",
+    "tags": [
+      "自動車技術",
+      "部品・車体",
+      "生産技術",
+      "品質管理"
+    ],
+    "desc": "自動車・部品メーカーの設計、研究、開発、生産技術、品質管理、購買部門などを対象とする技術展。",
+    "fit": "自動車部品メーカーの業務に直結する専門展示会。",
+    "url": "https://aee.expo-info.jsae.or.jp/ja/nagoya/",
+    "img": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80",
+    "priority": true
+  }
+];
+const fmt=d=>{const [y,m,day]=d.split("-");return `${y}/${Number(m)}/${Number(day)}`};
+const sameMonth=d=>d.slice(0,7);
+const months=[]; for(let y=2026,m=11; y<2027 || (y===2027 && m<=7); ){months.push(`${y}-${String(m).padStart(2,"0")}`);m++;if(m===13){m=1;y++;}}
+const monthLabel=m=>{const [y,mo]=m.split("-");return `${y}年${Number(mo)}月`};
+const stateKey=e=>"event-choice-"+e.name;
+function drawCalendar(){
+ const root=document.getElementById("calendar"); root.innerHTML="";
+ months.forEach(m=>{
+  const wrap=document.createElement("div");
+  wrap.innerHTML=`<div class="month"><h2>${monthLabel(m)}</h2></div>`;
+  const grid=document.createElement("div");grid.className="calendar";
+  ["日","月","火","水","木","金","土"].forEach(x=>{
+   const d=document.createElement("div");d.className="calhead";d.textContent=x;grid.appendChild(d)
+  });
+  const [y,mo]=m.split("-").map(Number), first=new Date(y,mo-1,1).getDay(), last=new Date(y,mo,0).getDate();
+  for(let i=0;i<first;i++){
+   const d=document.createElement("div");d.className="calcell empty";grid.appendChild(d)
+  }
+  for(let n=1;n<=last;n++){
+   const date=`${y}-${String(mo).padStart(2,"0")}-${String(n).padStart(2,"0")}`;
+   const hits=events.filter(e=>date>=e.date&&date<=e.end);
+   const d=document.createElement("div");d.className="calcell"+(hits.length?" has":"");
+   d.innerHTML=`<strong>${n}</strong>${hits.length?`<small>●</small>`:""}`;
+   if(hits.length){
+    d.title=hits.map(x=>x.name).join(" / ");
+    d.setAttribute("role","button");d.tabIndex=0;
+    const jump=()=>{
+     const firstEvent=events.findIndex(e=>date>=e.date&&date<=e.end);
+     if(firstEvent<0)return;
+     // Clear filters so the selected event is always rendered before scrolling.
+     document.getElementById("search").value="";
+     document.getElementById("region").value="";
+     document.getElementById("area").value="";
+     document.getElementById("category").value="";
+     refreshVenueOptions(); drawEvents();
+     requestAnimationFrame(()=>{
+      const target=document.getElementById("event-"+firstEvent);
+      const panel=document.getElementById("eventsPanel");
+      if(!target||!panel)return;
+      const top=target.getBoundingClientRect().top-panel.getBoundingClientRect().top+panel.scrollTop-8;
+      panel.scrollTo({top,behavior:"smooth"});
+      target.classList.add("jump-highlight");
+      setTimeout(()=>target.classList.remove("jump-highlight"),1800);
+     });
+    };
+    d.addEventListener("click",jump);
+    d.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();jump()}});
+   }
+   grid.appendChild(d)
+  }
+  wrap.appendChild(grid);root.appendChild(wrap);
+ });
+}
+function drawEvents(){
+ const root=document.getElementById("events");root.innerHTML="";
+ const q=document.getElementById("search").value.toLowerCase(), area=document.getElementById("area").value, cat=document.getElementById("category").value, region=document.getElementById("region").value;
+ let shown=0;
+ events.forEach((e,i)=>{
+  const hay=[e.name,e.area,e.venue,e.cat,e.desc,...e.tags].join(" ").toLowerCase();
+  if((q&&!hay.includes(q))||(area&&!e.venue.includes(area))||(cat&&e.cat!==cat)||(region&&e.area!==region))return;
+  shown++;
+  const section=sameMonth(e.date);
+  if(!root.querySelector(`[data-month="${section}"]`)){const h=document.createElement("div");h.className="month";h.dataset.month=section;h.innerHTML=`<h2>${monthLabel(section)}</h2>`;root.appendChild(h)}
+  const card=document.createElement("article");card.className="event";card.id="event-"+i;
+  const status=localStorage.getItem(stateKey(e))||"未検討", memo=localStorage.getItem(stateKey(e)+"-memo")||"";
+  card.innerHTML=`<div class="visual"><img src="${e.img}" alt="${e.alt}" loading="lazy" onerror="this.style.display='none'"><span>${e.venue}</span></div>
+  <div class="content"><div class="topline"><span class="date">${fmt(e.date)}${e.end!==e.date?" 〜 "+fmt(e.end):""}</span><span class="venue">${e.area}・${e.venue}</span>${e.priority?'<span class="priority">おすすめ候補</span>':""}</div>
+  <h3>${e.name}</h3><div class="tags">${e.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+  <p>${e.desc}</p><p><strong>見学の視点：</strong>${e.fit}</p>
+  <div class="actions"><a class="official" href="${e.url}" target="_blank" rel="noopener">公式ページを見る ↗</a>
+  <label>検討状況 <select class="status" data-i="${i}"><option ${status==="未検討"?"selected":""}>未検討</option><option ${status==="候補"?"selected":""}>候補</option><option ${status==="行きたい"?"selected":""}>行きたい</option><option ${status==="保留"?"selected":""}>保留</option><option ${status==="見送り"?"selected":""}>見送り</option></select></label>
+  <input class="memo" data-i="${i}" placeholder="メモ（参加者・目的など）" value="${memo.replaceAll('"','&quot;')}"></div></div>`;
+  root.appendChild(card);
+ });
+ if(!shown)root.innerHTML='<p>条件に一致するイベントはありません。</p>';
+ root.querySelectorAll(".status").forEach(el=>el.addEventListener("change",()=>localStorage.setItem(stateKey(events[el.dataset.i]),el.value)));
+ root.querySelectorAll(".memo").forEach(el=>el.addEventListener("change",()=>localStorage.setItem(stateKey(events[el.dataset.i])+"-memo",el.value)));
+}
+function clearChoices(){if(!confirm("このブラウザーに保存した検討状況・メモをすべて消しますか？"))return;events.forEach(e=>{localStorage.removeItem(stateKey(e));localStorage.removeItem(stateKey(e)+"-memo")});drawEvents()}
+const areaSelect=document.getElementById("area");
+function refreshVenueOptions(){const keep=areaSelect.value;const region=document.getElementById("region").value;const venues=[...new Set(events.filter(e=>!region||e.area===region).map(e=>e.venue))].sort();areaSelect.innerHTML='<option value="">全会場</option>'+venues.map(v=>`<option>${v}</option>`).join("");if(venues.includes(keep))areaSelect.value=keep;}
+document.getElementById("region").addEventListener("change",()=>{refreshVenueOptions();drawEvents()});
+["search","area","category"].forEach(id=>document.getElementById(id).addEventListener(id==="search"?"input":"change",drawEvents));
+refreshVenueOptions();drawCalendar();drawEvents();
+</script>
+</body>
+</html>
