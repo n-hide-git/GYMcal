@@ -1,3 +1,4 @@
+<!-- 2026.11.17 Ver.5.4 圏外・電波が弱い場所でも起動できるように（sw.js を追加。電波があれば最新版、なければ端末に保存した版で起動）。バージョン表示の横に圏外対応の状態をいつも表示（圏外OK／圏外OK・保存版／圏外×） -->
 <!-- /* 2026.11.13 nakaZ /* -->
 
 <html lang="ja">
@@ -257,12 +258,18 @@ th, td {
         font-size: 1.4em;
     }
 }    
+
+/* 2026.11.17 Ver.5.4 追加：バージョン表示の横に出す、圏外対応の状態（圏外OK／圏外OK・保存版／圏外×）
+   見出しは折り返さない指定（nowrap）のため、画面の幅が足りないときだけ、状態の手前で折り返せるようにする */
+#offlineState { white-space: normal; }
+#offlineState .os-text { white-space: nowrap; }
 </style>
 </head>
 
 <body>
 
-<h3><span class="sub-title">2026.11.13 入力をカンタンに　nakaZ　Ver.5.3</span><br>「良く見える！モトジムTOP比」</h3>
+<!-- 2026.11.17 Ver.5.4 変更：バージョン表示を更新（旧：2026.11.13 入力をカンタンに　nakaZ　Ver.5.3）。横の #offlineState に圏外対応の状態が出る -->
+<h3><span class="sub-title">2026.11.17 圏外でも開ける　nakaZ　Ver.5.4<span id="offlineState"></span></span><br>「良く見える！モトジムTOP比」</h3>
     
 
 <!-- 2026.11.13 変更：3つの入力欄とも inputmode="numeric" → "none"（標準キーボードを出さず、下の独自キーパッドで入力） -->
@@ -862,6 +869,73 @@ function calculate(){
     }
 }
 
+</script>
+
+<script>
+// ---------- 2026.11.17 Ver.5.4 追加：圏外・電波が弱い場所でも起動できるようにする ----------
+// 同じフォルダの sw.js が、このページを端末に保存する。
+// 電波があれば最新版を取りに行き、なければ（または3秒待っても届かなければ）端末に保存した版で起動する。
+// 入力した値（localStorage）には触らない。上の計算・キーパッドの処理にも手を入れていない。
+(function () {
+  'use strict';
+
+  // ---------- 圏外対応の状態を、バージョン表示の横にいつも出す ----------
+  //   圏外OK        ＝ アプリ本体が端末に保存されている（圏外でも開ける）
+  //   圏外OK・保存版 ＝ 今回は、端末に保存した版で起動した（圏外、または電波が弱かった）
+  //   圏外×         ＝ この環境では圏外対応が使えない（通信があれば、これまでどおり使える）
+  //   表示なし       ＝ まだ準備中（初回は数秒かかる）
+  var stateEl = document.getElementById('offlineState');
+  function setOfflineState(text) {
+    try {
+      if (!stateEl) return;
+      stateEl.textContent = '';
+      if (!text) return;
+      // 手前の半角スペースが、幅が足りないときの折り返し位置になる
+      stateEl.appendChild(document.createTextNode(' '));
+      var t = document.createElement('span');
+      t.className = 'os-text';
+      t.textContent = '・' + text;
+      stateEl.appendChild(t);
+    } catch (e) { /* 表示できなくても動作には影響しない */ }
+  }
+  function askOfflineState() {
+    try {
+      if (!('serviceWorker' in navigator)) { setOfflineState('圏外×'); return; }
+      var sw = navigator.serviceWorker.controller;
+      if (!sw || typeof MessageChannel === 'undefined') return;
+      var ch = new MessageChannel();
+      ch.port1.onmessage = function (ev) {
+        var d = ev.data || {};
+        if (d.type !== 'status') return;
+        if (!d.hasSaved) { setOfflineState(''); return; }
+        setOfflineState(d.source === 'saved' ? '圏外OK・保存版' : '圏外OK');
+      };
+      sw.postMessage({ type: 'status' }, [ch.port2]);
+    } catch (e) { /* 問い合わせできなくても動作には影響しない */ }
+  }
+
+  // ---------- sw.js の登録 ----------
+  try {
+    if (!('serviceWorker' in navigator)) { setOfflineState('圏外×'); return; }
+    var host = location.hostname;
+    // https（または自分のPCでの確認用 localhost）でしか使えない仕組みのため、それ以外では「圏外×」と出す
+    if (location.protocol !== 'https:' && host !== 'localhost' && host !== '127.0.0.1') {
+      setOfflineState('圏外×');
+      return;
+    }
+    // 担当が決まったら（初めて端末に保存できたとき など）、状態を更新する
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      askOfflineState();
+    });
+    navigator.serviceWorker.register('./sw.js').catch(function () {
+      /* 登録できなくても、これまでどおり使える。登録できなかったことだけ表示する */
+      setOfflineState('圏外×');
+    });
+    // 準備ができたら状態を問い合わせる
+    navigator.serviceWorker.ready.then(function () { askOfflineState(); }).catch(function () {});
+    askOfflineState();
+  } catch (e) { /* 対応していない環境では何もしない */ }
+})();
 </script>
 
 </body>
